@@ -452,296 +452,161 @@
 
             <!-- TAB 3: PRAKTISCHES LAB -->
             <section id="tab-lab" class="tab-panel">
-                <!-- Progress Stepper -->
-                <div class="stepper-container">
-                    <div class="stepper-line-progress" id="stepper-progress"></div>
-                    <div class="step-node active" onclick="goToStep(0)">
-                        <div class="step-circle">1</div>
-                        <span class="step-label">Voraussetzungen</span>
-                    </div>
-                    <div class="step-node" onclick="goToStep(1)">
-                        <div class="step-circle">2</div>
-                        <span class="step-label">Use Case</span>
-                    </div>
-                    <div class="step-node" onclick="goToStep(2)">
-                        <div class="step-circle">3</div>
-                        <span class="step-label">RAG-Code (uv)</span>
-                    </div>
-                    <div class="step-node" onclick="goToStep(3)">
-                        <div class="step-circle">4</div>
-                        <span class="step-label">Live Simulator</span>
-                    </div>
+                <!-- Sub-tab Navigation for Labs -->
+                <div class="sub-tab-nav">
+                    <button class="sub-tab-btn active" id="btn-sub-finetuning" onclick="switchSubLab('finetuning')">
+                        🧪 Lab 1: Gemma 4 Fine-Tuning (Colab)
+                    </button>
+                    <button class="sub-tab-btn" id="btn-sub-agents" onclick="switchSubLab('agents')">
+                        🤖 Lab 2: Gemma 4 ReAct Agent (Interactive)
+                    </button>
                 </div>
 
-                <!-- STEP 1: PREREQUISITES -->
-                <div class="step-panel active" id="step-panel-0">
-                    <div class="card">
-                        <h2 class="card-title">Lokale Voraussetzungen einrichten</h2>
+                <!-- SUB-LAB 1: FINE-TUNING -->
+                <div class="sub-lab-panel active" id="sub-lab-finetuning">
+                    <div class="card" style="margin-bottom: 2rem;">
+                        <h2 class="card-title">
+                            <span class="card-icon">🧪</span>
+                            Lab 1: Gemma 4 Fine-Tuning für KMU-Datensouveränität
+                        </h2>
                         <div class="card-content">
                             <p style="margin-bottom: 1rem;">
-                                Um Gemma 4 12B Unified offline auf Ihrer eigenen Hardware auszuführen, nutzen wir zwei extrem performante, moderne Tools: <strong>Ollama</strong> (für die Ausführung der KI) und <strong>uv</strong> (für die schnelle Ausführung des Python-Codes).
+                                Bringen Sie Gemma bei, wie ein Spezialist für Ihre Maschinen und internen Abläufe zu sprechen. In diesem Lab lernen Sie, wie man ein Open-Weights-Modell (z.B. <strong>Gemma 2 2B / Gemma 4 E2B</strong>) auf hochspezifischen KMU-Maschinenhandbüchern feinjustiert.
                             </p>
                             
-                            <h3 style="margin: 1.5rem 0 0.5rem 0; color: var(--color-md-blue);">1. Ollama installieren & Modell laden</h3>
-                            <p style="margin-bottom: 1rem;">
-                                Ollama ist eine leichtgewichtige Engine, die LLMs lokal ausführt. Laden Sie sie von <a href="https://ollama.com" target="_blank">ollama.com</a> herunter und installieren Sie sie. Öffnen Sie danach Ihr Terminal (PowerShell unter Windows) und laden Sie das Modell Gemma 4 herunter:
+                            <!-- Colab & Download Buttons -->
+                            <div class="colab-buttons-wrapper">
+                                <a href="https://colab.research.google.com/github/Unisvet/open-weights-project/blob/main/assets/Gemma_4_Fine_Tuning_Colab.ipynb" target="_blank" class="btn-custom primary colab-btn" style="text-decoration: none;">
+                                    <svg viewBox="0 0 24 24" width="20" height="24" style="margin-right: 8px; fill: currentColor; display: inline-block; vertical-align: middle;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                                    In Google Colab ausführen
+                                </a>
+                                <a href="assets/Gemma_4_Fine_Tuning_Colab.ipynb" download class="btn-custom secondary" style="text-decoration: none;">
+                                    📥 Notebook herunterladen (.ipynb)
+                                </a>
+                            </div>
+
+                            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.2rem; border-left: 4px solid var(--color-success); margin-bottom: 2rem;">
+                                <h4 style="margin-top: 0; color: var(--color-success);">💡 Warum Fine-Tuning statt RAG?</h4>
+                                <p style="font-size: 0.95rem; line-height: 1.5; margin: 0;">
+                                    Während RAG (Retrieval-Augmented Generation) dem Modell ein externes Gedächtnis verleiht, um spezifische Dokumente zu durchsuchen, verändert <strong>Fine-Tuning</strong> das inhärente Verhalten, die Tonalität und das tiefe Fachwissen des Modells selbst. Es eignet sich hervorragend, um dem Modell komplexe Formate, branchenspezifischen Jargon oder proprietäre Verhaltensweisen anzutrainieren.
+                                </p>
+                            </div>
+
+                            <h3 style="color: var(--color-md-blue); margin: 2rem 0 1rem 0;">🔬 Interaktiver Fine-Tuning Simulator</h3>
+                            <p style="margin-bottom: 1.5rem;">
+                                Testen Sie den Unterschied! Wählen Sie unten ein Szenario aus, um zu vergleichen, wie das <strong>Standard-Gemma-Modell</strong> (das nichts von Ihrer Firma weiß) und das <strong>feinjustierte Gemma-Modell</strong> (das auf Ihren Maschinendaten trainiert wurde) auf eine KMU-Spezialfrage antworten.
                             </p>
-                            <div class="code-container" style="margin-bottom: 1rem;">
-                                <div class="code-header">
-                                    <span class="code-lang-label">PowerShell / Terminal</span>
-                                    <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
-                                </div>
-                                <pre><code># Gemma 4 12B Unified Modell herunterladen (ca. 8 GB)
-ollama pull gemma4:12b
 
-# Optional: Nomic Embed Text für die lokale Vektorerstellung laden (ca. 270 MB)
-ollama pull nomic-embed-text</code></pre>
-                            </div>
-
-                            <h3 style="margin: 1.5rem 0 0.5rem 0; color: var(--color-md-blue);">2. uv (Moderner Python Package Manager)</h3>
-                            <p style="margin-bottom: 1rem;">
-                                <code>uv</code> ist ein ultraschneller, moderner Paketmanager von Astral. Er ermöglicht es uns, Python-Skripte inklusive ihrer Abhängigkeiten absolut zuverlässig und ohne manuelle Umgebungseinrichtung auszuführen.
-                            </p>
-                            <p style="margin-bottom: 0.5rem;"><strong>Windows Installation:</strong></p>
-                            <div class="code-container" style="margin-bottom: 1.5rem;">
-                                <div class="code-header">
-                                    <span class="code-lang-label">PowerShell (Administrator)</span>
-                                    <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
-                                </div>
-                                <pre><code>powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 2: USE CASE -->
-                <div class="step-panel" id="step-panel-1">
-                    <div class="card">
-                        <h2 class="card-title">Das sichere Offline-Firmenwiki für den Maschinenbau</h2>
-                        <div class="card-content">
-                            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
-                                <strong>Das Problem:</strong> Ein mittelständischer Industriebetrieb verfügt über jahrzehntelanges Wissen: tausende PDFs voller ISO-Normen, Wartungsprotokolle, Betriebsanleitungen und alte Baupläne. Neues Personal verbringt oft Stunden mit der Suche nach spezifischen Details.
-                            </p>
-                            
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
-                                <div class="comp-card open-weights" style="border-width: 1px;">
-                                    <h4 style="color: var(--color-success);">Die Lösung</h4>
-                                    <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                                        Ein lokales RAG-System (Retrieval-Augmented Generation) verbindet das Offline-Modell <strong>Gemma 4 12B Unified</strong> mit dem Dokumentenordner des Betriebs. Ein Mitarbeiter gibt ein: <br><em>„Welche Toleranzmaße galten bei der Ventil-Baugruppe X aus dem Projekt von 2026?“</em>
-                                    </p>
-                                </div>
-                                
-                                <div class="comp-card open-weights" style="border-width: 1px; border-color: rgba(29, 113, 184, 0.2);">
-                                    <h4 style="color: var(--color-md-blue);">Der Nutzen</h4>
-                                    <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                                        Innerhalb von Sekunden liefert die KI die exakte Antwort inklusive Quellenangabe (z.B. Dateiname & Seite). Da alles <strong>lokal auf dem Server</strong> läuft, verlässt kein einziges Betriebsgeheimnis das Werksgelände.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 3: PYTHON RAG CODE -->
-                <div class="step-panel" id="step-panel-2">
-                    <div class="card">
-                        <h2 class="card-title">Praktischer Python-Code mit uv (Single File Script)</h2>
-                        <div class="card-content">
-                            <p style="margin-bottom: 1rem;">
-                                Dank des PEP 723 Standards von <code>uv</code> können wir alle Abhängigkeiten direkt im Kopf des Skripts deklarieren. Sie müssen nichts manuell installieren! Erstellen Sie eine Datei namens <code>local_rag.py</code> und fügen Sie folgenden Code ein:
-                            </p>
-                            
-                            <div class="code-container" style="margin-bottom: 1rem;">
-                                <div class="code-header">
-                                    <span class="code-lang-label">local_rag.py (Python Script)</span>
-                                    <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
-                                </div>
-                                <pre><code># /// script
-# requires-python = ">=3.11"
-# dependencies = [
-#   "langchain-ollama>=0.2.0",
-#   "langchain-chroma>=0.1.2",
-#   "langchain>=0.2.0",
-#   "pypdf>=4.2.0",
-# ]
-# ///
-
-import os
-from langchain_community.document_loaders import PyPDFDirectoryLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma
-from langchain_ollama import OllamaEmbeddings, ChatOllama
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.prompts import ChatPromptTemplate
-
-# 1. PDFs aus lokalem Ordner laden (Erstellen Sie einen Ordner 'dokumente/')
-os.makedirs("dokumente", exist_ok=True)
-print("Bitte legen Sie PDFs in den Ordner 'dokumente'...")
-loader = PyPDFDirectoryLoader("dokumente/")
-docs = loader.load()
-
-if not docs:
-    print("Keine PDFs gefunden. Initialisiere RAG mit Demo-Wissen...")
-    from langchain_core.documents import Document
-    docs = [
-        Document(page_content="ISO_Norm_Ventil_X_2026: Die zulässigen Toleranzmaße bei der Ventil-Baugruppe X betragen für das Gehäuse maximal +0.02 mm und für den Ventilteller minimal -0.01 mm.", metadata={"source": "ISO_Norm_Ventil_X_2026.pdf"}),
-        Document(page_content="Wartungsprotokoll_Pumpe_Y_2025: Die Vakuumpumpe Typ Y ist alle 250 Betriebsstunden zu schmieren und nach 2000 Betriebsstunden einer vollständigen Revision zu unterziehen.", metadata={"source": "Wartung_Vakuumpumpe_2025.pdf"})
-    ]
-
-# 2. Text in mundgerechte Stücke (Chunks) zerteilen
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-chunks = text_splitter.split_documents(docs)
-
-# 3. Lokale Embeddings generieren und in Chroma Vektordatenbank speichern
-print("Generiere Offline-Embeddings via Ollama (nomic-embed-text)...")
-embeddings = OllamaEmbeddings(model="nomic-embed-text")
-vector_store = Chroma.from_documents(chunks, embeddings, persist_directory="./chroma_db")
-
-# 4. Prompt Template für Gemma 4 erstellen
-prompt_template = ChatPromptTemplate.from_template("""
-Du bist ein hochpräziser Assistenz-Algorithmus für den Maschinenbau. 
-Nutze ausschließlich den beigefügten Kontext, um die Frage des Mitarbeiters sachlich zu beantworten.
-Wenn die Antwort nicht im Kontext zu finden ist, sage ehrlich, dass das Wissen fehlt.
-
-Kontext:
-{context}
-
-Frage: {input}
-
-Detaillierte Antwort mit genauer Quellenangabe:""")
-
-# 5. Gemma 4 offline über Ollama ansprechen
-print("Lade Gemma 4 12B Unified offline...")
-llm = ChatOllama(model="gemma4:12b", temperature=0.2)
-
-# 6. RAG-Pipeline verbinden & abfragen
-retriever = vector_store.as_retriever(search_kwargs={"k": 2})
-document_chain = create_stuff_documents_chain(llm, prompt_template)
-retrieval_chain = create_retrieval_chain(retriever, document_chain)
-
-query = "Welche Toleranzmaße galten bei der Ventil-Baugruppe X aus dem Projekt von 2026?"
-print(f"\nFrage an lokales RAG: '{query}'")
-print("KI sucht in lokalen PDFs und antwortet offline...")
-
-response = retrieval_chain.invoke({"input": query})
-print("\n--- OFFLINE KI ANTWORT ---")
-print(response["answer"])
-</code></pre>
-                            </div>
-                            
-                            <p style="margin-bottom: 1rem;"><strong>So führen Sie dieses Skript blitzschnell aus:</strong></p>
-                            <div class="code-container">
-                                <div class="code-header">
-                                    <span class="code-lang-label">PowerShell</span>
-                                    <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
-                                </div>
-                                <pre><code>uv run local_rag.py</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 4: LIVE IN-BROWSER SIMULATOR -->
-                <div class="step-panel" id="step-panel-3">
-                    <div class="card">
-                        <h2 class="card-title">Interaktiver Offline-RAG-Simulator</h2>
-                        <div class="card-content">
-                            <p>
-                                Testen Sie den Use-Case direkt hier im Browser! Wir simulieren ein voll funktionsfähiges, lokales RAG-System. Wählen Sie Mock-Dokumente aus, klicken Sie auf "Indexieren", um das lokale Wissen zu laden, und stellen Sie dann Ihre Frage offline an Gemma 4.
-                            </p>
-                            
-                            <div class="simulator-container">
-                                <div class="sim-header">
-                                    <div class="sim-title">
-                                        <span class="sim-title-dot"></span>
-                                        <span>Lokales RAG-Wiki (Maschinenbau)</span>
-                                    </div>
-                                    <span class="sim-offline-badge">OFFLINE-MODUS</span>
-                                </div>
-                                
-                                <div class="sim-body">
-                                    <!-- Sidebar Mock files -->
-                                    <div class="sim-left-panel">
-                                        <h4 class="sim-section-title">1. PDF-Firmenwissen</h4>
-                                        <div class="mock-file-list">
-                                            <div class="mock-file-item selected" id="file-0" onclick="toggleFileSelection(0)">
-                                                <svg class="file-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zm5.5 3h1v-3h-1v3zM6 20h12v1.5H6c-.83 0-1.5-.67-1.5-1.5V7.5H4V18c0 1.1.9 2 2 2z"/></svg>
-                                        <div class="file-details">
-                                            <span class="file-name">ISO_Norm_Ventil_X_2026.pdf</span>
-                                            <span class="file-size">14.2 MB (ISO-Normen)</span>
-                                        </div>
-                                    </div>
-                                    <div class="mock-file-item selected" id="file-1" onclick="toggleFileSelection(1)">
-                                        <svg class="file-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zm5.5 3h1v-3h-1v3zM6 20h12v1.5H6c-.83 0-1.5-.67-1.5-1.5V7.5H4V18c0 1.1.9 2 2 2z"/></svg>
-                                        <div class="file-details">
-                                            <span class="file-name">Wartung_Vakuumpumpe_2025.pdf</span>
-                                            <span class="file-size">4.8 MB (Handbuch)</span>
-                                        </div>
-                                    </div>
-                                    <div class="mock-file-item" id="file-2" onclick="toggleFileSelection(2)">
-                                        <svg class="file-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zm5.5 3h1v-3h-1v3zM6 20h12v1.5H6c-.83 0-1.5-.67-1.5-1.5V7.5H4V18c0 1.1.9 2 2 2z"/></svg>
-                                        <div class="file-details">
-                                            <span class="file-name">Betriebs_Sicherheitsleitfaden.pdf</span>
-                                            <span class="file-size">1.2 MB (Leitfaden)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="btn-custom primary sim-index-btn" id="btn-index" onclick="startIndexing()">
-                                    Indexieren & Vektorisieren
-                                </button>
-                            </div>
-                            
-                            <!-- Main Simulator Area -->
-                            <div class="sim-right-panel">
-                                <!-- Console output screen -->
-                                <div class="sim-terminal-screen" id="sim-terminal">
-                                    <span class="terminal-line info">Terminal bereit. Bitte selektieren Sie Quelldokumente und klicken Sie auf 'Indexieren'...</span>
-                                </div>
-                                
-                                <div class="sim-query-box">
-                                    <h4 class="sim-section-title">2. Frage an das Offline-Wiki stellen</h4>
-                                    <select class="sim-select-query" id="sim-query-select" disabled>
-                                        <option value="" disabled selected>Zuerst Dokumente indexieren...</option>
-                                        <option value="toleranz">„Welche Toleranzmaße galten bei der Ventil-Baugruppe X aus dem Projekt von 2026?“</option>
-                                        <option value="wartung">„In welchen Intervallen muss die Vakuumpumpe Y gewartet werden?“</option>
-                                        <option value="sicherheit">„Welche Schutzausrüstung ist laut Betriebs-Sicherheitsleitfaden Pflicht?“</option>
+                            <!-- Fine-Tuning Simulator Widget -->
+                            <div class="ft-simulator-widget">
+                                <div class="ft-scenario-select">
+                                    <label for="ft-scenario" style="font-weight: 600; margin-right: 0.5rem;">Wählen Sie eine Maschinenspezifikation:</label>
+                                    <select id="ft-scenario" onchange="updateFtScenario()" class="select-custom">
+                                        <option value="press">Spreeland Press V4 (Fehlermeldung E104)</option>
+                                        <option value="turbomix">Turbomix S300 (Wartungsintervall Mischkopf)</option>
+                                        <option value="lasercut">LaserCut 9000 (Kalibrierungsmodus)</option>
                                     </select>
-                                    <button class="btn-custom primary" id="btn-ask" onclick="askSimulator()" disabled style="margin-top: 8px;">
-                                        KI-Frage offline stellen
+                                </div>
+
+                                <div class="ft-comparison-columns">
+                                    <!-- Base Model -->
+                                    <div class="ft-model-card base-model">
+                                        <div class="ft-card-header" style="background: rgba(231, 76, 60, 0.1); border-bottom: 1px solid rgba(231, 76, 60, 0.15); color: #e74c3c;">
+                                            <span style="font-size: 1.2rem;">⚠️</span> <strong>Standard-Gemma (Base)</strong>
+                                        </div>
+                                        <div class="ft-card-body">
+                                            <p class="ft-prompt-label">Prompt:</p>
+                                            <div class="ft-prompt-display" id="ft-prompt-base">Fehlermeldung E104 an der Spreeland Press V4 beheben.</div>
+                                            <p class="ft-prompt-label" style="margin-top: 1rem;">Antwort:</p>
+                                            <div class="ft-response-display" id="ft-response-base">
+                                                Es tut mir leid, aber ich habe keine spezifischen Informationen über 'Spreeland Press V4' oder 'Fehler E104' in meinen Trainingsdaten. Bitte konsultieren Sie das Benutzerhandbuch des Herstellers oder kontaktieren Sie Ihren internen technischen Support, um Maschinenschäden zu vermeiden.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fine-tuned Model -->
+                                    <div class="ft-model-card tuned-model">
+                                        <div class="ft-card-header" style="background: rgba(46, 204, 113, 0.1); border-bottom: 1px solid rgba(46, 204, 113, 0.15); color: #2ecc71;">
+                                            <span style="font-size: 1.2rem;">✨</span> <strong>Feinjustiertes Gemma (KMU-Spezialist)</strong>
+                                        </div>
+                                        <div class="ft-card-body">
+                                            <p class="ft-prompt-label">Prompt:</p>
+                                            <div class="ft-prompt-display" id="ft-prompt-tuned">Fehlermeldung E104 an der Spreeland Press V4 beheben.</div>
+                                            <p class="ft-prompt-label" style="margin-top: 1rem;">Antwort:</p>
+                                            <div class="ft-response-display active" id="ft-response-tuned">
+                                                Der Fehler E104 an der Press V4 deutet auf einen unzureichenden Öldruck im Hydraulikkreislauf hin. Gehen Sie wie folgt vor:<br>1. Schalten Sie die Maschine ab und sichern Sie sie gegen Wiedereinschalten.<br>2. Überprüfen Sie den Füllstand des Hydrauliköls am Schauglas (Soll: min. 60%).<br>3. Prüfen Sie den Druckminderer Ventil Y3 auf Verstopfung.<br>4. Reinigen Sie den Ölfilter F12. Falls der Fehler bestehen bleibt, kontaktieren Sie den Werkskundendienst.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-LAB 2: REACT AGENT -->
+                <div class="sub-lab-panel" id="sub-lab-agents">
+                    <div class="card" style="margin-bottom: 2rem;">
+                        <h2 class="card-title">
+                            <span class="card-icon">🤖</span>
+                            Lab 2: Gemma 4 ReAct Agent mit lokalen Werkzeugen
+                        </h2>
+                        <div class="card-content">
+                            <p style="margin-bottom: 1rem;">
+                                Heben Sie Ihre KI auf das nächste Level! Ein <strong>Agent</strong> liest nicht nur Texte, sondern führt aktiv Aktionen aus. Gemma 4 eignet sich dank seines integrierten <strong>Thinking Modes</strong> hervorragend, um logische Schlussfolgerungen zu ziehen und komplexe Tool-Chains autonom zu orchestrieren.
+                            </p>
+
+                            <div class="code-container" style="margin-bottom: 2rem;">
+                                <div class="code-header">
+                                    <span class="code-lang-label">gemma_agent.py (Python)</span>
+                                    <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                </div>
+                                <pre><code># Führen Sie diesen Agenten lokal mit Ollama (gemma4:12b) aus!
+# Er fragt das System nach Beständen, berechnet Zeiten und antwortet autonom.
+# Code-Auszug des Kernloops:
+def mock_agent_run(user_query):
+    # Gemma 4 plant, ruft Tools auf und kombiniert Ergebnisse
+    # 1. check_stock("Titanbolzen") -> Erhält 320 Einheiten
+    # 2. calculate_production_time("1180") -> Berechnet 7.87 Stunden
+    # 3. Formuliert finale Antwort offline auf Ihrer Hardware!</code></pre>
+                            </div>
+
+                            <h3 style="color: var(--color-md-blue); margin: 2rem 0 1rem 0;">⚡ Live-Agenten-Simulator</h3>
+                            <p style="margin-bottom: 1.5rem;">
+                                Schauen Sie Gemma 4 beim selbstständigen Denken und Handeln zu! Wählen Sie eine komplexe Aufgabe aus und starten Sie den Agenten-Loop, um die Schritte (Gedankengänge, Werkzeugaufrufe und Beobachtungen) in Echtzeit mitzuverfolgen.
+                            </p>
+
+                            <!-- Agent Simulator Widget -->
+                            <div class="agent-simulator">
+                                <div class="agent-control-panel">
+                                    <div style="flex-grow: 1;">
+                                        <label for="agent-task" style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Wählen Sie eine komplexe Agenten-Aufgabe:</label>
+                                        <select id="agent-task" class="select-custom" style="width: 100%;">
+                                            <option value="bolts">1.500 Titanbolzen bestellen - Lagerbestand prüfen & Produktionszeit kalkulieren</option>
+                                            <option value="lasercut">LaserCut 9000 kalibrieren - PIN nachschlagen & Anleitung ausgeben</option>
+                                            <option value="turbomix">Turbomix S300 Mischkopf warten - Intervalle prüfen & Ölbedarf ermitteln</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn-custom primary" id="btn-start-agent" onclick="startAgentSimulation()" style="align-self: flex-end; margin-top: 1rem;">
+                                        🚀 Agenten-Loop starten
                                     </button>
                                 </div>
-                                
-                                <div class="sim-playground">
-                                    <div class="sim-output-box">
-                                        <span class="output-box-title">
-                                            <span>Retrieved PDF Text Chunk (Vektorsuche)</span>
-                                            <span style="font-size: 0.75rem; color: var(--color-warning);">Schritt 1: Relevanz</span>
-                                        </span>
-                                        <div class="output-box-body" id="retrieved-chunk">
-                                            <span style="color: var(--text-secondary); font-style: italic;">Noch keine Vektorsuche ausgeführt...</span>
-                                        </div>
+
+                                <!-- Agent Console Output -->
+                                <div class="agent-console">
+                                    <div class="console-header">
+                                        <span class="console-dot red"></span>
+                                        <span class="console-dot yellow"></span>
+                                        <span class="console-dot green"></span>
+                                        <span class="console-title">Spreeland-Agent Terminal — Gemma 4 Loop</span>
                                     </div>
-                                    
-                                    <div class="sim-output-box">
-                                        <span class="output-box-title">
-                                            <span>Gemma 4 12B Unified (Offline LLM)</span>
-                                            <span style="font-size: 0.75rem; color: var(--color-success);">Schritt 2: Synthese</span>
-                                        </span>
-                                        <div class="output-box-body" id="llm-answer">
-                                            <span style="color: var(--text-secondary); font-style: italic;">Warte auf Frage...</span>
-                                        </div>
+                                    <div class="console-body" id="agent-console-log">
+                                        <div class="console-line text-muted">// Bereit für die Ausführung. Wählen Sie oben eine Aufgabe und klicken Sie auf Start.</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Navigation Controls for stepper -->
-                <div class="step-nav-buttons">
-                    <button class="btn-custom secondary" id="btn-prev-step" onclick="changeStep(-1)" disabled>Zurück</button>
-                    <button class="btn-custom primary" id="btn-next-step" onclick="changeStep(1)">Weiter</button>
                 </div>
             </section>
 

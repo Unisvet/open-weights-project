@@ -260,187 +260,146 @@ function updateStepperVisuals() {
     }
 }
 
-// 6. RAG Simulator Logic
-const mockFiles = [
-    { id: 0, name: "ISO_Norm_Ventil_X_2026.pdf", size: "14.2 MB", selected: true },
-    { id: 1, name: "Wartung_Vakuumpumpe_2025.pdf", size: "4.8 MB", selected: true },
-    { id: 2, name: "Betriebs_Sicherheitsleitfaden.pdf", size: "1.2 MB", selected: false }
-];
+// 6. SUB-LAB & SIMULATORS LOGIC
+function switchSubLab(subLabId) {
+    // Switch active buttons
+    document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.sub-lab-panel').forEach(panel => panel.classList.remove('active'));
 
-const mockKnowledge = {
-    toleranz: {
-        file: "ISO_Norm_Ventil_X_2026.pdf (Seite 42)",
-        chunk: "ISO-2026-V-X (Gehäuse & Teller): Für die Ventil-Baugruppe X gelten im Maschinenbau-Segment strenge Toleranzmaße. Das fertige Gehäuse darf ein Abweichungsmaß von maximal +0,02 mm nicht überschreiten. Für den zugehörigen Ventilteller der Ventil-Baugruppe X gilt ein minimales Toleranzmaß von -0,01 mm.",
-        gemma: "Basierend auf der Werksnorm ISO_Norm_Ventil_X_2026.pdf (Seite 42) gelten für die Ventil-Baugruppe X folgende exakte Toleranzmaße:\n\n" +
-               "1. Gehäuse: Das maximale zulässige Abweichungsmaß beträgt +0,02 mm.\n" +
-               "2. Ventilteller: Das minimale zulässige Abweichungsmaß beträgt -0,01 mm.\n\n" +
-               "Hinweis: Diese Maße sind für die präzise Montage im Maschinenbau-Segment zwingend einzuhalten, um die Dichtigkeit des Gesamtsystems offline zu garantieren."
+    const activeBtn = document.getElementById(`btn-sub-${subLabId}`);
+    const activePanel = document.getElementById(`sub-lab-${subLabId}`);
+
+    if (activeBtn) activeBtn.classList.add('active');
+    if (activePanel) activePanel.classList.add('active');
+}
+
+// Fine-Tuning Simulator Data
+const ftScenarios = {
+    press: {
+        prompt: "Fehlermeldung E104 an der Spreeland Press V4 beheben.",
+        base: "Es tut mir leid, aber ich habe keine spezifischen Informationen über 'Spreeland Press V4' oder 'Fehler E104' in meinen allgemeinen Trainingsdaten. Bitte konsultieren Sie das Benutzerhandbuch des Herstellers oder kontaktieren Sie Ihren internen technischen Support, um Maschinenschäden zu vermeiden.",
+        tuned: "Der Fehler E104 an der Press V4 deutet auf einen unzureichenden Öldruck im Hydraulikkreislauf hin. Gehen Sie wie folgt vor:\n\n1. Schalten Sie die Maschine ab und sichern Sie sie gegen Wiedereinschalten.\n2. Überprüfen Sie den Füllstand des Hydrauliköls am Schauglas (Soll: min. 60%).\n3. Prüfen Sie den Druckminderer Ventil Y3 auf Verstopfung.\n4. Reinigen Sie den Ölfilter F12. Falls der Fehler bestehen bleibt, kontaktieren Sie den Werkskundendienst."
     },
-    wartung: {
-        file: "Wartung_Vakuumpumpe_2025.pdf (Seite 7)",
-        chunk: "Wartungs-Intervalle Vakuumpumpe Typ Y: Um einen dauerhaften und sicheren Betrieb der Pumpe Typ Y zu gewährleisten, ist die Schmierung zwingend alle 250 Betriebsstunden durchzuführen. Eine vollständige mechanische Revision und Inspektion der Lager muss nach 2000 Betriebsstunden erfolgen.",
-        gemma: "Laut dem offiziellen Handbuch Wartung_Vakuumpumpe_2025.pdf (Seite 7) müssen für die Vakuumpumpe Typ Y folgende Intervalle exakt eingehalten werden:\n\n" +
-               "- Schmierung: Alle 250 Betriebsstunden erforderlich.\n" +
-               "- Vollständige Revision (Lagerinspektion): Alle 2000 Betriebsstunden fällig.\n\n" +
-               "Bitte tragen Sie jede durchgeführte Wartung im lokalen Maschinennachweis ein, um die ISO-9001-Zertifizierung nicht zu gefährden."
+    turbomix: {
+        prompt: "Wartungsintervall für den Turbomix S300 Mischkopf.",
+        base: "Das Wartungsintervall für Industrie-Mischköpfe liegt üblicherweise zwischen 100 und 1000 Betriebsstunden, abhängig von der Materialbelastung. Bitte schauen Sie in die Herstellerspezifikation Ihres Modells oder fragen Sie den Systemadministrator Ihrer Produktionslinie.",
+        tuned: "Der Mischkopf des Turbomix S300 erfordert folgende Wartungsintervalle:\n\n- Täglich: Sichtprüfung auf Dichtheit der Flansche und Reinigung der Mischkammer mit Spülmittellösung Typ M.\n- Alle 500 Betriebsstunden: Nachschmierung der Hauptlagerwelle mit Hochtemperaturfett Spreeland-HT-2.\n- Alle 2.000 Betriebsstunden oder jährlich: Vollständiger Austausch der PTFE-Dichtungen am Mischwellenauslass."
     },
-    sicherheit: {
-        file: "Betriebs_Sicherheitsleitfaden.pdf (Seite 12)",
-        chunk: "Sicherheit am Arbeitsplatz - Schutzausrüstung (PSA): Beim Betreten der Fertigungshalle 3 und beim Arbeiten an rotierenden Spindelwerkzeugen ist das Tragen einer EN-zertifizierten Schutzbrille sowie von Sicherheitsschuhen der Klasse S3 jederzeit absolute Pflicht.",
-        gemma: "Gemäß dem Betriebs_Sicherheitsleitfaden.pdf (Seite 12) gilt für alle Mitarbeiter folgende verbindliche Regelung bezüglich der Schutzausrüstung:\n\n" +
-               "- Pflichtbereiche: Fertigungshalle 3 sowie alle Arbeiten an rotierenden Spindelwerkzeugen.\n" +
-               "- Vorgeschriebene PSA:\n" +
-               "  1. EN-zertifizierte Schutzbrille\n" +
-               "  2. Sicherheitsschuhe der Klasse S3\n\n" +
-               "Zuwiderhandlungen werden im Interesse des Arbeitsschutzes abgemahnt."
+    lasercut: {
+        prompt: "Wie starte ich den Kalibrierungsmodus der Spreeland LaserCut 9000?",
+        base: "Um einen Laser-Cutter zu kalibrieren, müssen Sie in der Regel in die Systemeinstellungen gehen. Wenn Sie ein Passwort benötigen, wenden Sie sich bitte an Ihren Vorarbeiter. Sichern Sie die Maschine und tragen Sie eine Schutzbrille, bevor Sie Justierungen an den Spiegeln vornehmen.",
+        tuned: "Um den Kalibrierungsmodus an der LaserCut 9000 zu starten:\n\n1. Navigieren Sie im Hauptmenü des Bedienpanels auf 'Service' -> 'System-Diagnose'.\n2. Geben Sie die KMU-Service-PIN '7739' ein.\n3. Wählen Sie 'Optische Justierung' und drücken Sie den grünen Taster 'Start/OK'.\n4. Die Maschine fährt nun automatisch die 5 Referenzpunkte ab. Platzieren Sie hierzu die Justierplatte auf dem Schneidtisch."
     }
 };
 
-function toggleFileSelection(fileId) {
-    const file = mockFiles.find(f => f.id === fileId);
-    if (!file) return;
-    
-    file.selected = !file.selected;
-    const fileEl = document.getElementById(`file-${fileId}`);
-    if (fileEl) {
-        if (file.selected) {
-            fileEl.classList.add('selected');
-        } else {
-            fileEl.classList.remove('selected');
-        }
-    }
-    
-    // Log file adjustment to terminal
-    const term = document.getElementById('sim-terminal');
-    const time = new Date().toLocaleTimeString();
-    term.innerHTML += `<div class="terminal-line info">[${time}] Dokumentenauswahl geändert: ${file.name} ist nun ${file.selected ? 'aktiviert' : 'deaktiviert'}.</div>`;
-    term.scrollTop = term.scrollHeight;
-}
+function updateFtScenario() {
+    const select = document.getElementById('ft-scenario');
+    const scenario = select.value;
+    const data = ftScenarios[scenario];
 
-function startIndexing() {
-    const activeFiles = mockFiles.filter(f => f.selected);
-    const btnIndex = document.getElementById('btn-index');
-    const term = document.getElementById('sim-terminal');
-    
-    if (activeFiles.length === 0) {
-        alert("Bitte wählen Sie mindestens ein PDF-Dokument aus, um es offline zu indexieren!");
-        return;
-    }
-    
-    btnIndex.disabled = true;
-    btnIndex.innerText = "Indexiere...";
-    term.innerHTML = `<div class="terminal-line cmd">> uv run python -c "import langchain, chroma..."</div>`;
-    
-    const logs = [
-        { text: "[1/4] Starte Offline-Datenpipeline...", delay: 600, class: "info" },
-        { text: `[2/4] Lese ${activeFiles.length} aktive PDF-Dateien ein...`, delay: 1200, class: "info" },
-        ...activeFiles.map(f => ({ text: `   -> Lade Datei: ${f.name} (${f.size})`, delay: 1800, class: "info" })),
-        { text: "[3/4] Generiere Text-Chunks (Größe: 500 Zeichen, Überlappung: 100)...", delay: 2600, class: "info" },
-        { text: "   -> Erstelle offline Embeddings via nomic-embed-text über lokale Ollama-Schnittstelle...", delay: 3400, class: "info" },
-        { text: "[4/4] Speichere Vektor-Indizes in lokaler Chroma Vektordatenbank...", delay: 4200, class: "info" },
-        { text: "SUCCESS: Vektordatenbank erfolgreich befüllt! Lokale RAG-Schnittstelle bereit.", delay: 4800, class: "success" }
-    ];
-    
-    logs.forEach(log => {
-        setTimeout(() => {
-            const time = new Date().toLocaleTimeString();
-            term.innerHTML += `<div class="terminal-line ${log.class || ''}">[${time}] ${log.text}</div>`;
-            term.scrollTop = term.scrollHeight;
-        }, log.delay);
-    });
-    
-    setTimeout(() => {
-        btnIndex.innerText = "Indexierung abgeschlossen";
-        // Enable query elements
-        const querySelect = document.getElementById('sim-query-select');
-        const askBtn = document.getElementById('btn-ask');
-        
-        querySelect.disabled = false;
-        askBtn.disabled = false;
-        
-        // Populate options based on selected files
-        querySelect.innerHTML = `<option value="" disabled selected>Wählen Sie eine Frage an die lokale KI...</option>`;
-        
-        if (mockFiles[0].selected) {
-            querySelect.innerHTML += `<option value="toleranz">„Welche Toleranzmaße galten bei der Ventil-Baugruppe X aus dem Projekt von 2026?“</option>`;
-        }
-        if (mockFiles[1].selected) {
-            querySelect.innerHTML += `<option value="wartung">„In welchen Intervallen muss die Vakuumpumpe Y gewartet werden?“</option>`;
-        }
-        if (mockFiles[2].selected) {
-            querySelect.innerHTML += `<option value="sicherheit">„Welche Schutzausrüstung ist laut Betriebs-Sicherheitsleitfaden Pflicht?“</option>`;
-        }
-        
-        if (querySelect.options.length === 1) {
-            querySelect.innerHTML = `<option value="" disabled selected>Keine Fragen für die ausgewählten PDFs verfügbar.</option>`;
-            askBtn.disabled = true;
-        }
-    }, 5000);
-}
-
-function askSimulator() {
-    const select = document.getElementById('sim-query-select');
-    const queryKey = select.value;
-    const term = document.getElementById('sim-terminal');
-    const chunkBox = document.getElementById('retrieved-chunk');
-    const answerBox = document.getElementById('llm-answer');
-    const askBtn = document.getElementById('btn-ask');
-    
-    if (!queryKey) {
-        alert("Bitte wählen Sie zuerst eine Frage aus der Liste aus!");
-        return;
-    }
-    
-    const data = mockKnowledge[queryKey];
     if (!data) return;
-    
-    askBtn.disabled = true;
-    chunkBox.innerHTML = `<span style="color: var(--text-secondary); font-style: italic;">Suche in Vektordatenbank läuft...</span>`;
-    answerBox.innerHTML = `<span style="color: var(--text-secondary); font-style: italic;">Generiere Antwort via Gemma 4 12B Unified...</span>`;
-    
-    const time = new Date().toLocaleTimeString();
-    term.innerHTML += `<div class="terminal-line cmd">> [ANFRAGE] ${select.options[select.selectedIndex].text}</div>`;
-    term.scrollTop = term.scrollHeight;
-    
-    // Simulate vector similarity search delay
+
+    // Update prompts displays
+    document.getElementById('ft-prompt-base').innerText = data.prompt;
+    document.getElementById('ft-prompt-tuned').innerText = data.prompt;
+
+    // Fade and update responses
+    const baseRes = document.getElementById('ft-response-base');
+    const tunedRes = document.getElementById('ft-response-tuned');
+
+    baseRes.style.opacity = '0.3';
+    tunedRes.style.opacity = '0.3';
+
     setTimeout(() => {
-        term.innerHTML += `<div class="terminal-line info">[${new Date().toLocaleTimeString()}] Cosinus-Ähnlichkeit berechnet. Bester Treffer gefunden in: ${data.file}</div>`;
-        term.scrollTop = term.scrollHeight;
-        
-        chunkBox.innerHTML = `
-            <div class="source-chunk-highlight">
-                <strong>Gefundenes Textsegment aus:</strong> ${data.file}<br>
-                "${data.chunk}"
-            </div>
-        `;
-    }, 1200);
-    
-    // Simulate Gemma 4 text streaming response
-    setTimeout(() => {
-        term.innerHTML += `<div class="terminal-line success">[${new Date().toLocaleTimeString()}] Gemma 4 12B Unified streamt Antwort (Lokal)...</div>`;
-        term.scrollTop = term.scrollHeight;
-        
-        answerBox.innerHTML = `<div class="ai-answer-stream" id="streaming-text"></div><div class="ai-source-ref">Quelle: ${data.file}</div>`;
-        
-        const textTarget = document.getElementById('streaming-text');
-        const textToStream = data.gemma;
-        let words = textToStream.split(' ');
-        let wordIdx = 0;
-        
-        function streamNextWord() {
-            if (wordIdx < words.length) {
-                textTarget.innerHTML += words[wordIdx] + ' ';
-                wordIdx++;
-                setTimeout(streamNextWord, 45); // Typing speed
-            } else {
-                askBtn.disabled = false;
-                term.innerHTML += `<div class="terminal-line info">[${new Date().toLocaleTimeString()}] Offline-Synthese abgeschlossen.</div>`;
-                term.scrollTop = term.scrollHeight;
+        baseRes.innerText = data.base;
+        tunedRes.innerText = data.tuned;
+        baseRes.style.opacity = '1';
+        tunedRes.style.opacity = '1';
+    }, 200);
+}
+
+// ReAct Agent Simulator Loop
+const agentScenarios = {
+    bolts: [
+        { type: "text", text: "// Starte ReAct-Lauf für: '1.500 Titanbolzen bestellen - Lagerbestand prüfen & Produktionszeit kalkulieren'..." },
+        { type: "thought", text: "Der Benutzer möchte wissen, wie viele Titanbolzen wir herstellen müssen und wie lange das dauert. Zuerst muss ich prüfen, wie viele Titanbolzen derzeit auf Lager sind. Ich rufe das Werkzeug check_stock auf." },
+        { type: "action", text: "check_stock(\"Titanbolzen\")" },
+        { type: "observation", text: "ERGEBNIS: 320 Einheiten von 'titanbolzen' sind derzeit im Lager Spreeland verfügbar." },
+        { type: "thought", text: "Wir haben 320 Titanbolzen auf Lager. Für einen Auftrag von 1500 Einheiten fehlen uns also genau 1180 Stück (1500 - 320 = 1180). Jetzt muss ich die Produktionszeit für diese verbleibenden 1180 Titanbolzen berechnen. Ich rufe das Werkzeug calculate_production_time auf." },
+        { type: "action", text: "calculate_production_time(\"1180\")" },
+        { type: "observation", text: "ERGEBNIS: Die Produktion von 1180 Einheiten benötigt voraussichtlich 7.87 Stunden auf Fertigungslinie B." },
+        { type: "thought", text: "Ich habe alle notwendigen Informationen. Wir haben 320 Titanbolzen auf Lager. Wir müssen 1180 Einheiten neu produzieren, was 7.87 Stunden auf Fertigungslinie B dauern wird. Nun formuliere ich die Endantwort für den Kunden." },
+        { type: "final", text: "Für den angeforderten Auftrag von 1.500 Einheiten Titanbolzen haben wir derzeit bereits 320 Stück im Lager Spreeland vorrätig. Die verbleibenden 1.180 Einheiten müssen neu gefertigt werden. Dies wird auf unserer Fertigungslinie B eine Produktionszeit von voraussichtlich **7,87 Stunden** beanspruchen. Wir können somit unmittelbar nach Schichtbeginn mit der Auslieferung der Lagerware beginnen und die Produktion am selben Tag abschließen." }
+    ],
+    lasercut: [
+        { type: "text", text: "// Starte ReAct-Lauf für: 'LaserCut 9000 kalibrieren'..." },
+        { type: "thought", text: "Der Benutzer möchte den Kalibrierungsmodus für die LaserCut 9000 starten. Hierzu benötige ich spezifische technische Details wie z.B. einen PIN-Code oder Zugangsdaten. Ich frage die interne technische Datenbank ab." },
+        { type: "action", text: "query_technical_db(\"LaserCut 9000\")" },
+        { type: "observation", text: "ERGEBNIS: Spreeland LaserCut 9000: Kalibrierungs-Code PIN: 7739. Optische Referenzprüfung erforderlich." },
+        { type: "thought", text: "Ich habe die PIN (7739) und die Anforderung einer optischen Referenzprüfung ermittelt. Ich formuliere nun die präzise Schritt-für-Schritt-Anleitung für den Bediener." },
+        { type: "final", text: "Um die LaserCut 9000 erfolgreich zu kalibrieren, führen Sie bitte folgende Schritte am Bedienpanel aus:\n\n1. Öffnen Sie 'Service' -> 'System-Diagnose'.\n2. Geben Sie die ermittelte Service-PIN **7739** ein.\n3. Wählen Sie 'Optische Justierung' aus und drücken Sie 'Start/OK'.\n4. Die Maschine führt eine optische Referenzprüfung durch und fährt selbstständig 5 Punkte ab. Stellen Sie sicher, dass die Justierplatte auf dem Schneidtisch liegt." }
+    ],
+    turbomix: [
+        { type: "text", text: "// Starte ReAct-Lauf für: 'Turbomix S300 Mischkopf warten'..." },
+        { type: "thought", text: "Für den Turbomix S300 soll die Wartung geprüft werden. Ich muss die Service-Intervalle nachschlagen, um zu sehen, welche Aufgaben fällig sind, und ob wir die Materialien auf Lager haben." },
+        { type: "action", text: "query_technical_db(\"Turbomix S300\")" },
+        { type: "observation", text: "ERGEBNIS: Turbomix S300: Wartungsintervall Mischkopf alle 500 Stunden mit Fett HT-2. PTFE Dichtungen jährlicher Tausch." },
+        { type: "thought", text: "Der Mischkopf benötigt Schmierung mit Fett HT-2 und Dichtungstausch. Ich sollte prüfen, ob PTFE-Dichtungen auf Lager sind, um den Tausch vorzubereiten." },
+        { type: "action", text: "check_stock(\"PTFE-Dichtung\")" },
+        { type: "observation", text: "ERGEBNIS: 45 Einheiten von 'ptfe-dichtung m20' sind derzeit im Lager Spreeland verfügbar." },
+        { type: "thought", text: "Wir haben 45 PTFE-Dichtungen auf Lager, was für die Wartung ausreicht. Ich erstelle die endgültige Antwort mit dem Wartungsfahrplan." },
+        { type: "final", text: "Der Wartungsfahrplan für den Turbomix S300 sieht folgendes vor:\n\n- **Mischkopf-Schmierung (alle 500h):** Verwenden Sie das Hochtemperaturfett Spreeland-HT-2.\n- **Dichtungstausch (jährlich):** Ein Austausch der PTFE-Dichtungen ist erforderlich. Im Lager Spreeland sind aktuell **45 Einheiten** von 'ptfe-dichtung m20' vorrätig (Soll erfüllt). Die Wartung kann somit sofort durchgeführt werden." }
+    ]
+};
+
+let simInterval = null;
+
+function startAgentSimulation() {
+    const task = document.getElementById('agent-task').value;
+    const btn = document.getElementById('btn-start-agent');
+    const consoleLog = document.getElementById('agent-console-log');
+    const steps = agentScenarios[task];
+
+    if (!steps) return;
+
+    // Reset Console
+    consoleLog.innerHTML = "";
+    btn.disabled = true;
+    btn.innerText = "Agent läuft...";
+
+    if (simInterval) clearInterval(simInterval);
+
+    let stepIdx = 0;
+
+    function renderNextStep() {
+        if (stepIdx < steps.length) {
+            const step = steps[stepIdx];
+            let html = "";
+
+            if (step.type === "text") {
+                html = `<div class="console-line text-muted">${step.text}</div>`;
+            } else if (step.type === "thought") {
+                html = `<div class="console-line console-thought"><strong>🧠 Denken:</strong> ${step.text}</div>`;
+            } else if (step.type === "action") {
+                html = `<div class="console-line"><strong>⚙️ Aktion (Tool Call):</strong> <span class="console-action">${step.text}</span></div>`;
+            } else if (step.type === "observation") {
+                html = `<div class="console-line console-observation"><strong>📥 Beobachtung:</strong> ${step.text}</div>`;
+            } else if (step.type === "final") {
+                html = `<div class="console-line console-final"><strong>🎯 Endantwort (Gemma 4):</strong><br>${step.text.replace(/\n/g, '<br>')}</div>`;
             }
+
+            consoleLog.innerHTML += html;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+            stepIdx++;
+        } else {
+            clearInterval(simInterval);
+            btn.disabled = false;
+            btn.innerText = "🚀 Agenten-Loop starten";
         }
-        
-        streamNextWord();
-    }, 2000);
+    }
+
+    simInterval = setInterval(renderNextStep, 2000);
+    renderNextStep(); // Run the first one immediately
 }
 
 // 7. Interactive Quiz Engine
