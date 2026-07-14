@@ -85,7 +85,7 @@ def run_ollama_completion(prompt: str) -> str:
     """Sendet einen Prompt an eine lokal laufende Ollama-Instanz."""
     url = "http://localhost:11434/api/generate"
     data = {
-        "model": "gemma4:12b",  # Nutzt Gemma 4 12B Unified
+        "model": "gemma-schnell",  # Nutzt das hardware-optimierte Modell
         "prompt": prompt,
         "stream": False,
         "options": {

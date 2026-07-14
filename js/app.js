@@ -649,6 +649,25 @@ function resetQuiz() {
     renderQuizQuestion();
 }
 
+function copyCode(btn) {
+    const container = btn.closest('.code-container') || btn.parentElement.parentElement;
+    const codeEl = container.querySelector('code') || container.querySelector('pre');
+    if (codeEl) {
+        const text = codeEl.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btn.innerText;
+            btn.innerText = 'Kopiert!';
+            btn.style.color = 'var(--color-success)';
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.color = '';
+            }, 2000);
+        }).catch(err => {
+            console.error('Fehler beim Kopieren: ', err);
+        });
+    }
+}
+
 // 8. Global Initializers on load
 window.addEventListener('DOMContentLoaded', () => {
     initTheme();

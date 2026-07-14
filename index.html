@@ -608,55 +608,239 @@
                             </p>
 
                             <!-- COMPLETE OLLAMA LOCAL CPU INSTRUCTIONS -->
+                            <!-- COMPLETE OLLAMA LOCAL CPU INSTRUCTIONS -->
                             <div class="ollama-cpu-guide" style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--border-color); border-left: 4px solid var(--color-success);">
                                 <h3 style="margin-top: 0; color: var(--color-success); display: flex; align-items: center; gap: 8px;">
-                                    ⚙️ Offline-Inbetriebnahme auf CPU-only Hardware (Ollama)
+                                    ⚙️ Offline-Inbetriebnahme auf lokaler Hardware (Ollama Setup)
                                 </h3>
                                 <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
-                                    Gemma 4 lässt sich ohne Cloud-Anbindung, absolut sicher und datenschutzkonform direkt auf Ihrer eigenen Büro-Hardware via <strong>Ollama</strong> ausführen. Auf Systemen ohne dedizierte Grafikkarte (CPU-only) sollten Sie folgende optimierte Schritte befolgen:
+                                    Führen Sie Sprachmodelle ohne Cloud-Anbindung, absolut sicher und datenschutzkonform direkt auf Ihrer eigenen Hardware via <strong>Ollama</strong> aus. Befolgen Sie diese Schritte im Terminal:
                                 </p>
                                 
-                                <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; font-size: 0.9rem;">
-                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
-                                        <strong style="color: var(--text-primary);">1. Ollama installieren</strong><br>
-                                        Laden Sie den Installer für Windows/macOS/Linux von <a href="https://ollama.com" target="_blank" style="color: var(--color-success); font-weight: 600;">ollama.com</a> herunter und führen Sie ihn aus.
+                                <div style="display: flex; flex-direction: column; gap: 1.5rem; font-size: 0.9rem;">
+                                    <!-- STEP 1 -->
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 6px;">
+                                        <strong style="color: var(--text-primary); font-size: 0.95rem;">1. Terminal öffnen & Ollama installieren:</strong><br>
+                                        <p style="margin: 0.5rem 0 0.8rem 0; line-height: 1.4;">
+                                            Öffnen Sie ein neues Terminal in VS Code. Prüfen Sie zuerst, ob Ollama bereits installiert ist:
+                                        </p>
+                                        <div class="code-container" style="margin-bottom: 0.8rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Terminal / PowerShell</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>ollama --version</code></pre>
+                                        </div>
+                                        <p style="margin: 0.5rem 0 0.8rem 0; line-height: 1.4;">
+                                            Sollte Ollama nicht installiert sein, nutzen Sie für Windows den schnellen PowerShell-Einzeiler oder laden Sie den Installer für macOS/Linux herunter:
+                                        </p>
+                                        <div class="code-container" style="margin-bottom: 0.5rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Windows Quick-Install (PowerShell)</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>irm https://ollama.com/install.ps1 | iex</code></pre>
+                                        </div>
+                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">
+                                            Für macOS und Linux besuchen Sie: <a href="https://ollama.com/" target="_blank" style="color: var(--color-success);">ollama.com</a>. Schließen und öffnen Sie das Terminal nach der Installation neu!
+                                        </span>
                                     </div>
-                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
-                                        <strong style="color: var(--text-primary);">2. Modell-Auswahl je nach System-RAM:</strong><br>
-                                        <ul style="margin-top: 0.5rem; padding-left: 1.2rem;">
-                                            <li style="margin-bottom: 0.5rem;"><strong>Gemma 4 (12B):</strong> Ausgezeichnete Logik, benötigt mindestens 16 GB bis 32 GB RAM. Antwortet auf CPU mit ca. 1-2 Tokens/Sek. <br><code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">ollama run gemma4:12b</code></li>
-                                            <li><strong>Gemma 2 (2B) – <em>Empfehlungs-Tipp!</em>:</strong> Extrem flink auf reinen Office-CPUs, benötigt nur 4 GB RAM. Genial für schnelle RAG- und Agenten-Abläufe.<br><code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">ollama run gemma2:2b</code></li>
-                                        </ul>
+
+                                    <!-- STEP 2 -->
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 6px;">
+                                        <strong style="color: var(--text-primary); font-size: 0.95rem;">2. Modell herunterladen und starten:</strong><br>
+                                        <p style="margin: 0.5rem 0 0.8rem 0; line-height: 1.4;">
+                                            Starten Sie Ihr Wunschmodell. Für die meisten Standard-Laptops und Büro-PCs (z.B. mit 16 GB RAM) empfehlen wir das extrem flinke <strong>Gemma 2 (2B)</strong>. Es reagiert in Sekundenbruchteilen direkt auf Ihrer CPU. Wer über High-End-Hardware verfügt, kann auch das größere <strong>Gemma 4 (12B)</strong> wählen:
+                                        </p>
+                                        <div class="code-container" style="margin-bottom: 0.8rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Gemma 2 (Empfohlen & Schnell auf CPU)</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>ollama run gemma2:2b</code></pre>
+                                        </div>
+                                        <div class="code-container" style="margin-bottom: 0.5rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Gemma 4 (Für High-End Systeme ab 16-32GB RAM)</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>ollama run gemma4:12b</code></pre>
+                                        </div>
                                     </div>
-                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
-                                        <strong style="color: var(--text-primary);">3. Thread-Optimierung für maximales CPU-Tempo:</strong><br>
-                                        Erstellen Sie im Projektordner eine Datei namens <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">Modelfile</code> mit folgendem Inhalt:<br>
-                                        <pre style="background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin: 0.5rem 0; font-family: var(--font-mono); line-height: 1.4;">FROM gemma4:12b
-PARAMETER num_thread 8   # Setzen Sie dies auf die physische Kern-Zahl Ihrer CPU
-PARAMETER num_ctx 4096    # Reduzierter Kontext schont RAM</pre>
-                                        Erzeugen und starten Sie das Modell mit:<br>
-                                        <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">ollama create gemma4-cpu -f ./Modelfile</code><br>
-                                        <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">ollama run gemma4-cpu</code>
+
+                                    <!-- STEP 3 -->
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 6px;">
+                                        <strong style="color: var(--text-primary); font-size: 0.95rem;">3. Interaktive Konsole & Befehle:</strong><br>
+                                        <p style="margin: 0.5rem 0 0.8rem 0; line-height: 1.4;">
+                                            Sobald das Modell geladen ist, können Sie direkt im Terminal Ihre Nachrichten schreiben. Nutzen Sie folgende Befehle zur Steuerung:
+                                        </p>
+                                        <div class="code-container" style="margin-bottom: 0.5rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Ollama CLI Commands</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>Available Commands:
+  /set            Set session variables
+  /show           Show model information
+  /load &lt;model&gt;   Load a session or model
+  /save &lt;model&gt;   Save your current session
+  /clear          Clear session context
+  /bye            Exit
+  /?, /help       Help for a command
+  /? shortcuts    Help for keyboard shortcuts
+
+Use """ to begin a multi-line message.
+Use \path\to\file to include .jpg, .png, .webp images, or .wav audio files.</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <!-- STEP 4 -->
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 6px;">
+                                        <strong style="color: var(--text-primary); font-size: 0.95rem;">4. Maximale Performance durch eigene Modell-Optimierung (Modelfile):</strong><br>
+                                        <p style="margin: 0.5rem 0 0.8rem 0; line-height: 1.4;">
+                                            Durch ein <code>Modelfile</code> passen wir Gemma optimal an Ihre CPU-Hardware an. Hierbei weisen wir das Modell an, genau die physische Kern-Zahl Ihrer CPU zu nutzen, was das Rechentempo drastisch steigert. Erstellen Sie eine Datei namens <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">Modelfile</code> im Projektverzeichnis mit folgendem Inhalt:
+                                        </p>
+                                        <div class="code-container" style="margin-bottom: 0.8rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Modelfile Inhalt (Optimiert für Standard-CPUs)</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>FROM gemma2:2b
+PARAMETER num_thread 4   # Nutzen Sie exakt die Anzahl physischer Kerne Ihrer CPU (z.B. 4 bei i7-1165G7)
+PARAMETER num_ctx 4096    # Reduzierter Kontext schont wertvollen RAM</code></pre>
+                                        </div>
+                                        
+                                        <p style="margin: 0.8rem 0 0.4rem 0; line-height: 1.4; font-weight: 600;">
+                                            Schritt 4a: Das optimierte Modell bauen (registrieren)
+                                        </p>
+                                        <p style="margin: 0 0 0.5rem 0; line-height: 1.4; font-size: 0.85rem; color: var(--text-secondary);">
+                                            Dieser Befehl liest Ihr Modelfile ein und erstellt unter dem Namen <code>gemma-schnell</code> eine neue, hardware-optimierte Variante auf Ihrem PC.
+                                        </p>
+                                        <div class="code-container" style="margin-bottom: 0.8rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Schritt 4a: Modell bauen</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>ollama create gemma-schnell -f ./Modelfile</code></pre>
+                                        </div>
+
+                                        <p style="margin: 0.8rem 0 0.4rem 0; line-height: 1.4; font-weight: 600;">
+                                            Schritt 4b: Das optimierte Modell starten
+                                        </p>
+                                        <p style="margin: 0 0 0.5rem 0; line-height: 1.4; font-size: 0.85rem; color: var(--text-secondary);">
+                                            Startet Ihr frisch optimiertes Modell. Sie werden merken, wie schnell es jetzt auf Ihrer reinen Büro-CPU antwortet!
+                                        <div class="code-container" style="margin-bottom: 0.5rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Schritt 4b: Modell ausführen</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>ollama run gemma-schnell</code></pre>
+                                        </div>
                                     </div>
                                 </div>
-                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
-                                    💡 <strong>Tipp:</strong> Sollte der Agent im Terminal zu langsam sein, passen Sie in <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">assets/gemma_agent.py</code> einfach den Modellnamen auf das pfeilschnelle <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">gemma2:2b</code> an.
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 1rem; margin-bottom: 0;">
+                                    💡 <strong>Tipp:</strong> Sollte der Agent im Terminal zu langsam sein, passen Sie in <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">assets/gemma_agent.py</code> einfach den Modellnamen auf das pfeilschnelle <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">gemma-schnell</code> an.
                                 </p>
+                            </div>
+
+                            <!-- INTERESSANTE PROMPTS SEKTION -->
+                            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--border-color); border-left: 4px solid var(--color-md-blue);">
+                                <h3 style="margin-top: 0; color: var(--color-md-blue); display: flex; align-items: center; gap: 8px;">
+                                    💡 Spannende Prompts zum Ausprobieren (Testen Sie Ihr lokales Modell!)
+                                </h3>
+                                <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
+                                    Geben Sie diese Prompts nacheinander in Ihren laufenden Terminal-Chat (<code>ollama run gemma-schnell</code>) ein, um die Leistung, Logik und Schreibqualitäten zu testen:
+                                </p>
+
+                                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong>1. Logik & Denken:</strong><br>
+                                        <p style="margin: 0.5rem 0; font-size: 0.85rem; color: var(--text-secondary);">Testet das logische Schlussfolgern des Modells:</p>
+                                        <div class="code-container">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Prompt 1 (Logik)</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>Ein Bauer muss einen Wolf, eine Ziege und einen Kohlkopf über einen Fluss bringen. Das Boot kann aber nur den Bauern und ein weiteres Tier oder den Kohl tragen. Wenn der Bauer den Wolf und die Ziege alleine lässt, frisst der Wolf die Ziege. Wenn er die Ziege und den Kohl alleine lässt, frisst die Ziege den Kohl. Wie bringt er alle drei sicher ans andere Ufer? Erkläre Schritt für Schritt.</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong>2. KMU-Praxis & E-Mail-Schreiben:</strong><br>
+                                        <p style="margin: 0.5rem 0; font-size: 0.85rem; color: var(--text-secondary);">Testet Tonfall und Formulierungskompetenz:</p>
+                                        <div class="code-container">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Prompt 2 (E-Mail)</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>Schreibe eine sehr freundliche, aber bestimmte E-Mail an einen langjährigen Kunden, dessen Rechnung (Nr. RE-1044, Brutto 737,80 EUR) seit 3 Wochen überfällig ist. Biete ein kurzes Telefonat an, falls es Abstimmungsbedarf gibt.</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong>3. Programmiercode generieren:</strong><br>
+                                        <p style="margin: 0.5rem 0; font-size: 0.85rem; color: var(--text-secondary);">Erstellt strukturierten Programmcode auf Abruf:</p>
+                                        <div class="code-container">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Prompt 3 (Programmieren)</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>Schreibe eine kurze Python-Funktion, die prüft, ob eine deutsche IBAN formal gültig ist.</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AGENT EXPLANATION SEKTION -->
+                            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--border-color); border-left: 4px solid var(--color-accent-blue);">
+                                <h3 style="margin-top: 0; color: var(--color-accent-blue); display: flex; align-items: center; gap: 8px;">
+                                    🤖 Der Spreeland-Agent (gemma_agent.py) — Was ist das Ziel?
+                                </h3>
+                                <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
+                                    <strong>Das Ziel:</strong> Ein normaler Chatbot antwortet nur mit Text. Ein <strong>Agent</strong> hingegen kann selbstständig programmierte Werkzeuge (Python-Funktionen) aufrufen, um reale Probleme zu lösen! Unser Agent hat Zugriff auf drei Werkzeuge:
+                                </p>
+                                <ul style="margin-bottom: 1.5rem; font-size: 0.9rem; padding-left: 1.2rem; line-height: 1.5;">
+                                    <li>📦 <code>check_stock(item)</code>: Fragt den aktuellen Bestand im Lager ab.</li>
+                                    <li>⏱️ <code>calculate_production_time(amount)</code>: Berechnet die benötigte Produktionszeit für Werkstücke.</li>
+                                    <li>📁 <code>query_technical_db(keyword)</code>: Sucht Maschinenspezifikationen im internen Wiki.</li>
+                                </ul>
+
+                                <p style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.95rem;">👣 Step-by-Step Anleitung zum Ausführen:</p>
+                                <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong>Schritt 1: Terminal vorbereiten</strong><br>
+                                        Falls Sie noch im interaktiven Ollama-Chat sind, tippen Sie <code>/bye</code> ein und drücken Sie Enter, um zurück zur PowerShell zu kehren.
+                                    </div>
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong>Schritt 2: Das Agenten-Skript starten</strong><br>
+                                        Führen Sie das Skript in Ihrem VS Code Terminal mit folgendem Befehl aus (Kopierbar):
+                                        <div class="code-container" style="margin-top: 0.5rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Agenten starten (PowerShell)</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>python assets/gemma_agent.py</code></pre>
+                                        </div>
+                                    </div>
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong>Schritt 3: Die Logs analysieren</strong><br>
+                                        Beobachten Sie die Ausgabe! Der Agent zerlegt die Kundenbestellung (<em>"1500 Titanbolzen"</em>) autonom in Einzelschritte:<br>
+                                        1. Er <strong>denkt</strong> nach und ruft <code>check_stock("Titanbolzen")</code> auf.<br>
+                                        2. Er stellt fest, dass nur 320 auf Lager sind, also 1180 fehlen.<br>
+                                        3. Er ruft <code>calculate_production_time("1180")</code> auf und berechnet die Produktionszeit.<br>
+                                        4. Er gibt Ihnen die perfekte, kombinierte <strong>Endantwort</strong> aus!
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="code-container" style="margin-bottom: 2rem;">
                                 <div class="code-header">
-                                    <span class="code-lang-label">gemma_agent.py (Python)</span>
+                                    <span class="code-lang-label">gemma_agent.py (Python-Auszug)</span>
                                     <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
                                 </div>
-                                <pre><code># Führen Sie diesen Agenten lokal mit Ollama (gemma4:12b) aus!
-# Er fragt das System nach Beständen, berechnet Zeiten und antwortet autonom.
-# Code-Auszug des Kernloops:
-def mock_agent_run(user_query):
-    # Gemma 4 plant, ruft Tools auf und kombiniert Ergebnisse
-    # 1. check_stock("Titanbolzen") -> Erhält 320 Einheiten
-    # 2. calculate_production_time("1180") -> Berechnet 7.87 Stunden
-    # 3. Formuliert finale Antwort offline auf Ihrer Hardware!</code></pre>
+                                <pre><code># gemma_agent.py läuft lokal über Ihre gemma-schnell Instanz!
+# Kernloop des ReAct Patterns:
+# Denken -> Aktion (Toolaufruf) -> Beobachtung (Tool-Ergebnis) -> Endantwort</code></pre>
                             </div>
 
                             <h3 style="color: var(--color-md-blue); margin: 2rem 0 1rem 0;">⚡ Live-Agenten-Simulator</h3>
@@ -733,6 +917,42 @@ def mock_agent_run(user_query):
                                 <p style="font-size: 0.95rem; line-height: 1.5; margin: 0;">
                                     Durch das Vorschalten eines strikten <strong>Systemprompts</strong> (System Instructions) zwingen wir das lokale Modell dazu, ausschließlich im strukturierten JSON-Format zu antworten. Die Temperatur setzen wir auf <strong>0.0</strong>, um absolut deterministische Ergebnisse ohne Fantasie-Antworten (Halluzinationen) zu garantieren.
                                 </p>
+                            </div>
+
+                            <!-- LOCAL TERMINAL EXTRACTION GUIDE -->
+                            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border-color); border-left: 4px solid var(--color-accent-green); margin-bottom: 2rem;">
+                                <h4 style="margin-top: 0; color: var(--color-accent-green); display: flex; align-items: center; gap: 8px;">
+                                    📂 Part 2: Rechnungs-Extraktion auf Knopfdruck im Terminal
+                                </h4>
+                                <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
+                                    Wir haben im Projektverzeichnis einen Ordner namens <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">Rechnungen/</code> mit Beispieldokumenten und ein fertiges Skript <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">extract_invoice.py</code> angelegt. Dieses Skript lädt die Belege lokal ein und lässt Gemma die Daten in sauberes JSON strukturieren.
+                                </p>
+                                
+                                <p style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">Führen Sie diese Befehle in Ihrem VS Code Terminal aus:</p>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Rechnung 1 (Schweißtechnik GmbH) extrahieren:</span>
+                                        <div class="code-container" style="margin-top: 0.5rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Extrahiere Rechnung 1001</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>python extract_invoice.py Rechnungen/rechnung_1001.txt</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Rechnung 2 (Cottbuser Verpackung) extrahieren:</span>
+                                        <div class="code-container" style="margin-top: 0.5rem;">
+                                            <div class="code-header">
+                                                <span class="code-lang-label">Extrahiere Rechnung 1002</span>
+                                                <button class="btn-copy" onclick="copyCode(this)">Kopieren</button>
+                                            </div>
+                                            <pre><code>python extract_invoice.py Rechnungen/rechnung_1002.txt</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <h3 style="color: var(--color-md-blue); margin: 2rem 0 1rem 0;">📊 Interaktiver Extraktions-Simulator</h3>
