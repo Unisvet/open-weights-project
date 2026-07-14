@@ -320,17 +320,17 @@ function updateFtScenario() {
 
 // Extraction Simulator Data
 const extScenarios = {
-    email: {
-        input: "Hallo Service-Team,\n\ngestern Abend gegen 22:30 Uhr hat die Spreeland Press V4 plötzlich den Geist aufgegeben. Der Techniker Herr Weber hat die Maschine sofort abgeschaltet. Der Bildschirm zeigte rot den Fehlercode E104 an. \n\nEs sieht so aus, als ob das Hydrauliköl fast vollständig leer ist (unter 15%). Wir haben vorsichtshalber den Hauptschalter gesichert. Bitte schickt schnell jemanden vorbei, da die halbe Produktion steht!\n\nGruß, H. Weber",
-        output: "{\n  \"maschine\": \"Spreeland Press V4\",\n  \"zeitstempel\": \"Gestern, 22:30 Uhr\",\n  \"fehlercode\": \"E104\",\n  \"techniker\": \"H. Weber\",\n  \"prioritaet\": \"HOCH\",\n  \"ursache\": \"Hydraulikoelmangel (unter 15%)\",\n  \"massnahmen\": [\n    \"Maschine sofort abgeschaltet\",\n    \"Hauptschalter gesichert\"\n  ]\n}"
+    invoice: {
+        input: "RECHNUNG - Spreeland Industriebedarf GmbH\nRechnungsnummer: RE-2026-88391\nDatum: 14. Juli 2026\nKundennummer: DE-99382\n\nPosten:\n1. 10x PTFE-Dichtung M20 (Art-Nr: 55319) - Einzelpreis: 4,50 EUR - Gesamt: 45,00 EUR\n2. 2x Hydrauliköl HLP46 20L (Art-Nr: 88201) - Einzelpreis: 59,90 EUR - Gesamt: 119,80 EUR\n\nNetto-Betrag: 164,80 EUR\nUSt. (19%): 31,31 EUR\nBruttobetrag: 196,11 EUR\nZahlbar innerhalb von 14 Tagen ohne Abzug auf DE88 3005 0000 1234 5678 90.",
+        output: "{\n  \"beleg_typ\": \"Rechnung\",\n  \"rechnungsnummer\": \"RE-2026-88391\",\n  \"datum\": \"2026-07-14\",\n  \"aussteller\": \"Spreeland Industriebedarf GmbH\",\n  \"kundennummer\": \"DE-99382\",\n  \"waehrung\": \"EUR\",\n  \"bruttobetrag\": 196.11,\n  \"posten\": [\n    {\n      \"bezeichnung\": \"PTFE-Dichtung M20\",\n      \"menge\": 10,\n      \"gesamtpreis\": 45.0\n    },\n    {\n      \"bezeichnung\": \"Hydrauliköl HLP46 20L\",\n      \"menge\": 2,\n      \"gesamtpreis\": 119.8\n    }\n  ]\n}"
+    },
+    email_kunden: {
+        input: "Betreff: Express-Bestellung & Reklamation zu Ticket-77291\n\nSehr geehrte Damen und Herren,\n\nwir müssen dringend 150 Stück Kupferschrauben M10 nachbestellen (bitte Expresslieferung an Werk 2, Herr Schneider).\n\nZudem reklamieren wir die letzte Lieferung vom 08. Juli. Dort waren von den 500 bestellten Titanbolzen leider 12 Stück fehlerhaft gewindet und unbrauchbar. Bitte buchen Sie uns den entsprechenden Betrag von 54,00 € auf unser Kundenkonto zurück.\n\nMit freundlichen Grüßen,\nFirma Metallbau Spree-Neiße",
+        output: "{\n  \"beleg_typ\": \"Kunden-E-Mail\",\n  \"absender\": \"Firma Metallbau Spree-Neiße\",\n  \"bestellungen\": [\n    {\n      \"artikel\": \"Kupferschrauben M10\",\n      \"menge\": 150,\n      \"ort\": \"Werk 2 (Herr Schneider)\",\n      \"versand\": \"Express\"\n    }\n  ],\n  \"reklamationen\": [\n    {\n      \"ticket_id\": \"Ticket-77291\",\n      \"datum_bezug\": \"2026-07-08\",\n      \"artikel\": \"Titanbolzen\",\n      \"menge_defekt\": 12,\n      \"erstattungsbetrag_eur\": 54.0\n    }\n  ]\n}"
     },
     note: {
         input: "Notiz an Schichtwechsel:\n\nTurbomix S300 hat bei Schichtende seltsam vibriert. Müller hat den Mischkopf grob gereinigt, aber die Lagerwelle müsste dringend mal wieder nachgeschmiert werden. \n\nSollte spätestens in 3 Tagen passieren, sonst blockiert das noch alles. Kein Fehlercode sichtbar.",
-        output: "{\n  \"maschine\": \"Turbomix S300\",\n  \"zeitstempel\": \"Schichtende\",\n  \"fehlercode\": null,\n  \"techniker\": \"Müller\",\n  \"prioritaet\": \"MITTEL\",\n  \"ursache\": \"Hauptlagerwelle muss nachgeschmiert werden\",\n  \"massnahmen\": [\n    \"Mischkopf grob gereinigt\"\n  ]\n}"
-    },
-    whatsapp: {
-        input: "Halle 3 hier:\n\nLaserCut 9000 schneidet ungenau. Wir brauchen dringend eine Neukalibrierung der optischen Spiegel. Wer hat die Service-PIN parat?\n\nProduktion läuft erst mal weiter, aber Ausschuss ist hoch.",
-        output: "{\n  \"maschine\": \"LaserCut 9000\",\n  \"zeitstempel\": null,\n  \"fehlercode\": null,\n  \"techniker\": null,\n  \"prioritaet\": \"MITTEL\",\n  \"ursache\": \"Optische Spiegel dejustiert (schneidet ungenau)\",\n  \"massnahmen\": [\n    \"Produktion läuft weiter\",\n    \"Suche nach Service-PIN gestartet\"\n  ]\n}"
+        output: "{\n  \"beleg_typ\": \"Werkstattbericht\",\n  \"maschine\": \"Turbomix S300\",\n  \"zeitstempel\": \"Schichtende\",\n  \"fehlercode\": null,\n  \"techniker\": \"Müller\",\n  \"prioritaet\": \"MITTEL\",\n  \"ursache\": \"Hauptlagerwelle muss nachgeschmiert werden\",\n  \"massnahmen\": [\n    \"Mischkopf grob gereinigt\"\n  ]\n}"
     }
 };
 
