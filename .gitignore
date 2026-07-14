@@ -1,0 +1,11 @@
+# Ignore the docs directory as requested
+docs/
+
+# Standard editor and system files
+.DS_Store
+Thumbs.db
+*.log
+.gemini/
+.agents/
+.vscode/
+node_modules/
