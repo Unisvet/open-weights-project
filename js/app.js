@@ -318,6 +318,43 @@ function updateFtScenario() {
     }, 200);
 }
 
+// Extraction Simulator Data
+const extScenarios = {
+    email: {
+        input: "Hallo Service-Team,\n\ngestern Abend gegen 22:30 Uhr hat die Spreeland Press V4 plötzlich den Geist aufgegeben. Der Techniker Herr Weber hat die Maschine sofort abgeschaltet. Der Bildschirm zeigte rot den Fehlercode E104 an. \n\nEs sieht so aus, als ob das Hydrauliköl fast vollständig leer ist (unter 15%). Wir haben vorsichtshalber den Hauptschalter gesichert. Bitte schickt schnell jemanden vorbei, da die halbe Produktion steht!\n\nGruß, H. Weber",
+        output: "{\n  \"maschine\": \"Spreeland Press V4\",\n  \"zeitstempel\": \"Gestern, 22:30 Uhr\",\n  \"fehlercode\": \"E104\",\n  \"techniker\": \"H. Weber\",\n  \"prioritaet\": \"HOCH\",\n  \"ursache\": \"Hydraulikoelmangel (unter 15%)\",\n  \"massnahmen\": [\n    \"Maschine sofort abgeschaltet\",\n    \"Hauptschalter gesichert\"\n  ]\n}"
+    },
+    note: {
+        input: "Notiz an Schichtwechsel:\n\nTurbomix S300 hat bei Schichtende seltsam vibriert. Müller hat den Mischkopf grob gereinigt, aber die Lagerwelle müsste dringend mal wieder nachgeschmiert werden. \n\nSollte spätestens in 3 Tagen passieren, sonst blockiert das noch alles. Kein Fehlercode sichtbar.",
+        output: "{\n  \"maschine\": \"Turbomix S300\",\n  \"zeitstempel\": \"Schichtende\",\n  \"fehlercode\": null,\n  \"techniker\": \"Müller\",\n  \"prioritaet\": \"MITTEL\",\n  \"ursache\": \"Hauptlagerwelle muss nachgeschmiert werden\",\n  \"massnahmen\": [\n    \"Mischkopf grob gereinigt\"\n  ]\n}"
+    },
+    whatsapp: {
+        input: "Halle 3 hier:\n\nLaserCut 9000 schneidet ungenau. Wir brauchen dringend eine Neukalibrierung der optischen Spiegel. Wer hat die Service-PIN parat?\n\nProduktion läuft erst mal weiter, aber Ausschuss ist hoch.",
+        output: "{\n  \"maschine\": \"LaserCut 9000\",\n  \"zeitstempel\": null,\n  \"fehlercode\": null,\n  \"techniker\": null,\n  \"prioritaet\": \"MITTEL\",\n  \"ursache\": \"Optische Spiegel dejustiert (schneidet ungenau)\",\n  \"massnahmen\": [\n    \"Produktion läuft weiter\",\n    \"Suche nach Service-PIN gestartet\"\n  ]\n}"
+    }
+};
+
+function updateExtScenario() {
+    const select = document.getElementById('ext-scenario');
+    const scenario = select.value;
+    const data = extScenarios[scenario];
+
+    if (!data) return;
+
+    const inputDisplay = document.getElementById('ext-input-text');
+    const outputDisplay = document.getElementById('ext-output-json');
+
+    inputDisplay.style.opacity = '0.3';
+    outputDisplay.style.opacity = '0.3';
+
+    setTimeout(() => {
+        inputDisplay.innerText = data.input;
+        outputDisplay.innerText = data.output;
+        inputDisplay.style.opacity = '1';
+        outputDisplay.style.opacity = '1';
+    }, 200);
+}
+
 // ReAct Agent Simulator Loop
 const agentScenarios = {
     bolts: [
