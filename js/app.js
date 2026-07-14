@@ -51,6 +51,11 @@ function switchTab(tabId) {
     
     if (navItem) navItem.classList.add('active');
     if (tabPanel) tabPanel.classList.add('active');
+
+    // Force quiz rendering when switching to quiz tab
+    if (tabId === 'quiz') {
+        renderQuizQuestion();
+    }
     
     // Dynamically update the global hero introduction description with fun stories & quotes
     const heroDescEl = document.getElementById('hero-desc-global');
@@ -442,59 +447,103 @@ function startAgentSimulation() {
 // 7. Interactive Quiz Engine
 const quizQuestions = [
     {
-        q: "Was unterscheidet ein Open-Weights-Modell im Wesentlichen von einem Closed-Source-Modell?",
+        q: "Was unterscheidet ein Open-Weights-Modell (wie Googles Gemma) im Kern von einem herkömmlichen Cloud-Modell?",
         options: [
-            "Das Modell hat ein sehr geringes Dateigewicht und benötigt fast keinen Festplattenspeicher.",
-            "Die fertig trainierten Verbindungsgewichte (Parameter) des neuronalen Netzes sind öffentlich frei herunterladbar.",
-            "Es darf im Gegensatz zu Closed-Source-Modellen nur im Freien bei kühlen Temperaturen betrieben werden.",
-            "Es besitzt keine künstlichen Neuronen, sondern beruht ausschließlich auf fest einprogrammierten Wenn-Dann-Regeln."
+            "Es besitzt keine veränderbaren Verbindungsgewichte und rechnet nur mit festen mathematischen Konstanten.",
+            "Es funktioniert nur im Freien und benötigt keine Stromverbindung.",
+            "Es kann nur Bilder, aber niemals Texte oder Code verarbeiten.",
+            "Die trainierten Gewichte (Weights) sind frei verfügbar, wodurch es komplett lokal, offline und ohne Datenabfluss betrieben werden kann."
+        ],
+        correct: 3,
+        feedback: "Korrekt! Open-Weights bedeutet, dass die Parameter öffentlich zur Verfügung stehen und Sie das Modell ohne Datenweitergabe an Dritte komplett offline auf Ihrer eigenen Hardware betreiben können."
+    },
+    {
+        q: "Welches Gemma-Modell wird für Standard-Laptops mit 16 GB RAM empfohlen, um eine flüssige CPU-Ausführung zu gewährleisten?",
+        options: [
+            "Gemma 4 (12B) – da 12 Milliarden Parameter genau auf 12 GB RAM aufgeteilt werden können.",
+            "Gemma 2 (2B) – da es extrem ressourcenschonend ist, nur ca. 4 GB RAM belegt und pfeilschnell auf reinen Büro-CPUs reagiert.",
+            "Gemma 1 (7B) – da es das einzige Modell ist, das ohne Betriebssystem gestartet werden kann.",
+            "Es gibt kein funktionierendes Modell für 16 GB RAM."
         ],
         correct: 1,
-        feedback: "Korrekt! Bei Open-Weights-Modellen (wie Googles Gemma-Familie) stellt der Entwickler die trainierten Verbindungsgewichte öffentlich zur Verfügung. Dadurch können Sie das Modell herunterladen, lokal hosten und komplett offline nutzen."
+        feedback: "Perfekt! Gemma 2 (2B) läuft hervorragend auf Standard-CPUs mit 16 GB RAM. Größere Modelle wie Gemma 4 (12B) überlasten oft den Arbeitsspeicher des Laptops, was zu starkem Ruckeln führt."
     },
     {
-        q: "Welchen Hauptvorteil bietet die Offline-Nutzung lokaler Modelle für deutsche KMU?",
+        q: "Warum schränkt man in einem 'Modelfile' den Parameter 'num_thread' auf die Anzahl physischer Kerne der CPU ein?",
         options: [
-            "Man spart sich den Kauf von Strom, da die Rechner im Offline-Modus ohne Stromversorgung arbeiten.",
-            "Die KI lernt automatisch das geheime Wissen aller Konkurrenzunternehmen im Spreeland.",
-            "100% Datensouveränität und problemlose Einhaltung der DSGVO, da sensible Betriebsdaten und Kundenakten niemals Ihren Server verlassen.",
-            "Das Modell kann offline viel schneller Updates aus dem Internet herunterladen."
-        ],
-        correct: 2,
-        feedback: "Hervorragend! Da die Daten das Unternehmen nie verlassen, gibt es keine DSGVO-Hürden und kein Risiko von Industriespionage über externe Cloud-Dienstleister."
-    },
-    {
-        q: "Wofür steht die Abkürzung 'RAG' im Kontext von Sprachmodellen?",
-        options: [
-            "Retrieval-Augmented Generation (Erweiterung der KI durch gezielte Informationsabfrage aus lokalen Dokumenten).",
-            "Random-Access-Generator (Ein Zufallsgenerator für besonders kreative Bildbearbeitungs-Aufgaben).",
-            "Regional-Analyse-Gemeinschaft (Das Gremium zur Überwachung der KI-Sicherheit in Brandenburg).",
-            "Requirements-And-Guidelines (Die rechtlichen Nutzungsbedingungen von Google-Sprachmodellen)."
+            "Um Context-Switching-Overhead zu vermeiden, was das Rechentempo auf Consumer-CPUs drastisch beschleunigt.",
+            "Weil das Modell sonst abstürzt, wenn es mehr als 2 Threads gleichzeitig verwendet.",
+            "Damit die Grafikkarte des Computers vollständig deaktiviert wird.",
+            "Dies ist ein geheimer Befehl, der nur für Intel-Prozessoren existiert."
         ],
         correct: 0,
-        feedback: "Richtig! RAG sucht zuerst in lokalen Dokumenten nach passenden Abschnitten zur Benutzerfrage und gibt diese Abschnitte als Kontext an das LLM weiter. Dadurch antwortet die KI extrem sachlich und belegt ihre Antworten mit echten Quellen."
+        feedback: "Genau! Das Pinning auf die echten physischen Kerne (z.B. 4 statt 8 logische Threads bei vielen i7-Modellen) vermeidet Leistungseinbußen durch Hyperthreading-Overhead."
     },
     {
-        q: "Warum ist das Tool 'uv' von Astral eine große Erleichterung für KMU-IT-Abteilungen?",
+        q: "Mit welchem Tool-Aufruf können Sie Ihr eigenes, optimiertes Modell aus einem Modelfile in Ollama kompilieren und registrieren?",
         options: [
-            "Es konvertiert alten Python-Code vollautomatisch in fertige 3D-Druck-Vorlagen.",
-            "Es ist ein extrem schneller, moderner Paketmanager, der Python-Abhängigkeiten in Sekunden auflöst und isolierte Umgebungen selbstständig managt.",
-            "Es schützt Laptops vor Erschütterungen und Stürzen durch eine spezielle Software-Dämpfung.",
-            "Es dient als offizieller Virenscanner für alle KI-Modelle der Bundesregierung."
+            "ollama run gemma-schnell",
+            "ollama build gemma-schnell",
+            "ollama create gemma-schnell -f ./Modelfile",
+            "ollama compile --all"
         ],
-        correct: 1,
-        feedback: "Absolut! 'uv' löst Abhängigkeiten bis zu 100-mal schneller als klassische Tools auf und macht die Ausführung komplexer Python-RAG-Skripte im KMU extrem robust und reproduzierbar."
+        correct: 2,
+        feedback: "Korrekt! Der Befehl 'ollama create [Name] -f ./Modelfile' erzeugt Ihr maßgeschneidertes Modell lokal auf Ihrem System. Danach starten Sie es mit 'ollama run'."
     },
     {
-        q: "Welches Merkmal zeichnet die 'Unified' Architektur von Gemma 4 12B aus?",
+        q: "Welche Einstellung ist bei einer strukturierten JSON-Datenextraktion aus Rechnungen entscheidend, um deterministische Ergebnisse zu garantieren?",
         options: [
-            "Das Modell kann nur auf genau einem einzigen Rechnertyp der Marke Google ausgeführt werden.",
-            "Sie ist encoderfrei und verarbeitet Text, Bilder und Audio nativ im gleichen Einbettungsraum, was multimodal offline Latenzen stark verringert.",
-            "Sie vereinheitlicht alle europäischen Sprachen zu einer einzigen künstlichen KI-Mischsprache.",
-            "Sie benötigt zwingend eine dauerhafte Verbindung zu einem Großrechner, um einfache Antworten zu generieren."
+            "Das Modell muss zwingend mit dem Internet verbunden sein.",
+            "Es muss im Hintergrund Musik abgespielt werden.",
+            "Man muss die Kontextlänge (num_ctx) auf das Maximum von 1.000.000 Token erhöhen.",
+            "Die Temperatur muss auf 0.0 gesetzt werden, um Kreativität und Halluzinationen (Fantasieren) vollständig auszuschließen."
         ],
-        correct: 1,
-        feedback: "Genau! Als unified Modell verzichtet Gemma 4 auf separate, teure Encoder für Bild und Ton. Es projiziert Bild- und Ton-Signale direkt in den Sprachmodellraum. Das spart Rechenpower und ermöglicht echte multimodale Offline-Assistenten!"
+        correct: 3,
+        feedback: "Absolut richtig! Eine Temperatur von 0.0 sorgt dafür, dass das Modell streng mathematisch die wahrscheinlichsten Token auswählt. Perfekt für strukturierte Daten wie Rechnungen!"
+    },
+    {
+        q: "Was versteht man unter 'Flexiblem Deployment' bei Open-Weights-Modellen?",
+        options: [
+            "Die freie Wahl des Betriebsortes – ob auf eigenen lokalen Servern (on-premise), Edge-Geräten, Laptops oder in einer privaten Cloud.",
+            "Dass das Modell ausschließlich über den Google Play Store heruntergeladen werden kann.",
+            "Dass sich das Modell flexibel an die Bildschirmgröße des Benutzers anpasst.",
+            "Dass das Modell stündlich gelöscht und neu installiert werden muss."
+        ],
+        correct: 0,
+        feedback: "Korrekt! Flexibles Deployment bedeutet absolute Freiheit bei der Hosting-Infrastruktur. Sie entscheiden selbst, wo Ihre Daten verarbeitet werden, ob offline auf Ihrem Rechner oder gesichert in Ihrer Cloud."
+    },
+    {
+        q: "Was unterscheidet einen autonomen 'KI-Agenten' von einem einfachen Chat-Modell?",
+        options: [
+            "Ein KI-Agent benötigt keine Eingaben, sondern erfindet seine eigenen Fragen.",
+            "Ein Agent kann nur E-Mails verschicken, aber keine mathematischen Aufgaben lösen.",
+            "Ein KI-Agent arbeitet in einer ReAct-Schleife (Reasoning + Acting), kann eigenständig externe Werkzeuge (Tools) aufrufen und komplexe Aufgaben selbstständig lösen.",
+            "Ein Agent is einfach ein Chatbot, der besonders schnell tippen kann."
+        ],
+        correct: 2,
+        feedback: "Hervorragend! KI-Agenten nutzen Werkzeuge (wie APIs, Datenbankabfragen oder lokale Python-Skripte), um komplexe Aufgaben eigenständig zu planen, auszuführen und das Ergebnis zu kontrollieren."
+    },
+    {
+        q: "Welchen unschlagbaren Kostenvorteil bieten Open-Weights-Modelle bei der Ausführung komplexer KI-Agentenschleifen?",
+        options: [
+            "Sie kosten im Einkauf mehr, verbrauchen dafür aber weniger Festplattenspeicher.",
+            "Man bekommt vom Staat eine Prämie für jedes lokal ausgeführte Token.",
+            "Lokale Modelle benötigen überhaupt keine Hardware-Ressourcen.",
+            "Da Agenten in Denk-Schleifen oft dutzende API-Aufrufe pro Aufgabe tätigen, entfallen bei lokaler Ausführung jegliche Token-Gebühren komplett."
+        ],
+        correct: 3,
+        feedback: "Absolut wahr! Eine Agenten-Schleife kann pro Aufgabe 10 bis 50 Aufrufe erzeugen. Mit lokalen Modellen wie Gemma bezahlen Sie 0€ Token-Gebühren – egal wie oft Ihr Agent nachdenkt und Tools nutzt!"
+    },
+    {
+        q: "Warum ist die lokale Ausführung von KI-Agenten mit Open-Weights-Modellen in KMU-Sicherheitsnetzwerken besonders wertvoll?",
+        options: [
+            "Weil der Agent sensible lokale Firmen-Tools (wie Datenbanken oder Warenwirtschaftssysteme) völlig offline steuern kann, ohne dass Daten abfließen.",
+            "Weil Agenten vollen Zugriff auf das Internet benötigen, um überhaupt zu funktionieren.",
+            "Weil lokale Modelle automatisch alle Sicherheits-Updates von Windows deaktivieren.",
+            "Es gibt keinen Sicherheitsvorteil gegenüber US-amerikanischen Cloud-APIs."
+        ],
+        correct: 0,
+        feedback: "Hervorragend erkannt! Ein Agent greift oft tief in interne Systeme zu. Mit lokalen Open-Weights-Modellen bleibt diese sensible Tool-Steuerung zu 100% im geschützten Firmennetzwerk."
     }
 ];
 
