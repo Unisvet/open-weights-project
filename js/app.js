@@ -52,6 +52,31 @@ function switchTab(tabId) {
     if (navItem) navItem.classList.add('active');
     if (tabPanel) tabPanel.classList.add('active');
     
+    // Dynamically update the global hero introduction description with fun stories & quotes
+    const heroDescEl = document.getElementById('hero-desc-global');
+    if (heroDescEl) {
+        // Add a smooth fade-out / fade-in micro-animation
+        heroDescEl.style.transition = 'opacity 0.15s ease';
+        heroDescEl.style.opacity = '0';
+        
+        setTimeout(() => {
+            if (tabId === 'intro') {
+                heroDescEl.innerHTML = `💡 <strong>„Das Wissen teilen, nicht die Kontrolle abgeben.“</strong><br>
+                    Willkommen im Cockpit Ihres KI-Workshops! Begleiten Sie uns auf einer Entdeckungsreise, wie kleine und mittlere Unternehmen (KMU) dank moderner Open-Weights-Modelle wie <strong>Gemma 4 12B Unified</strong> die volle Datensouveränität behalten, komplett offline arbeiten und kostengünstig maßgeschneiderte KI-Lösungen implementieren können.`;
+            } else if (tabId === 'infographic') {
+                heroDescEl.innerHTML = `📖 <strong>Die Spurensuche im Dokumenten-Dschungel...</strong><br>
+                    Stellen Sie sich vor: Ein Meister sucht um 3 Uhr nachts ein Toleranzmaß in einem 500-seitigen PDF-Wartungsordner von 1998. Unser lokales RAG-System findet es in <strong>0,8 Sekunden</strong> – ohne, dass auch nur ein einziges Byte Ihr Werkstor verlässt. Klicken Sie unten auf die Komponenten und reisen Sie mit den Daten!`;
+            } else if (tabId === 'lab') {
+                heroDescEl.innerHTML = `💻 <strong>Vom Code-Zeilen-Jongleur zum Offline-Architekten!</strong><br>
+                    <em>„The best way to predict the future is to invent it.“ – Alan Kay</em>. Genug der Theorie: Jetzt krempeln wir die Ärmel hoch! Mit nur einem einzigen Python-Skript und dem ultraschnellen Paketmanager <strong>uv</strong> erwecken wir Ihre eigene Gemma 4 auf Ihrem Rechner zum Leben. Los geht's!`;
+            } else if (tabId === 'quiz') {
+                heroDescEl.innerHTML = `🏆 <strong>Wer wird KI-Souveränitäts-Millionär?</strong><br>
+                    Die Hardware summt, der Code steht – aber haben Sie das Zeug zum echten Offline-Champion? Stellen Sie Ihr neues Wissen in unserem interaktiven 5-Fragen-Quiz auf die Probe und holen Sie sich Ihr personalisiertes <strong>Zertifikat für digitale Souveränität</strong>!`;
+            }
+            heroDescEl.style.opacity = '1';
+        }, 150);
+    }
+    
     // Smooth scroll top on tab switch
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }

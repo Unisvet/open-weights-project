@@ -74,8 +74,9 @@
                     <a href="https://www.digitalzentrum-spreeland.de/" target="_blank" rel="noopener noreferrer" class="badge-date">Mittelstand-Digital Zentrum Spreeland</a>
                 </div>
                 <h1 class="hero-title">Open-Weights-Modelle für KMU einfach erklärt</h1>
-                <p class="hero-description">
-                    Willkommen beim interaktiven Begleit-Leitfaden für Ihren KI-Workshop. Erfahren Sie, wie kleine und mittlere Unternehmen (KMU) dank moderner Open-Weights-Modelle wie <strong>Gemma 4 12B Unified</strong> volle Datensouveränität behalten, komplett offline arbeiten und kostengünstig maßgeschneiderte KI-Lösungen implementieren können.
+                <p class="hero-description" id="hero-desc-global">
+                    💡 <strong>„Das Wissen teilen, nicht die Kontrolle abgeben.“</strong><br>
+                    Willkommen im Cockpit Ihres KI-Workshops! Begleiten Sie uns auf einer Entdeckungsreise, wie kleine und mittlere Unternehmen (KMU) dank moderner Open-Weights-Modelle wie <strong>Gemma 4 12B Unified</strong> die volle Datensouveränität behalten, komplett offline arbeiten und kostengünstig maßgeschneiderte KI-Lösungen implementieren können.
                 </p>
             </header>
 
@@ -99,6 +100,43 @@
                             <svg class="alert-box-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                             <div>
                                 <strong>Der große Vorteil für KMU:</strong> Sie können diese Modelle herunterladen, lokal auf eigener Hardware ausführen und nach Belieben anpassen (Feintuning). Es fließen <strong>keine Firmendaten</strong> ins Internet ab.
+                            </div>
+                        </div>
+
+                        <!-- Web Resource Link Grid -->
+                        <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                                <span>📚</span> Weiterführende Ressourcen & Analysen
+                            </h4>
+                            <div class="intro-links-grid">
+                                <a href="https://artificialanalysis.ai/models/open-source" target="_blank" rel="noopener noreferrer" class="intro-link-card">
+                                    <div class="intro-link-icon">📊</div>
+                                    <div class="intro-link-text">
+                                        <span class="intro-link-title" title="Comparison of Open Source Models">Comparison of Open Source Models</span>
+                                        <span class="intro-link-desc" title="Leistungs- & Benchmark-Vergleich auf Artificial Analysis">Leistungs- & Benchmark-Vergleich</span>
+                                    </div>
+                                </a>
+                                <a href="https://deepmind.google/models/gemma/gemma-4/" target="_blank" rel="noopener noreferrer" class="intro-link-card">
+                                    <div class="intro-link-icon">🌐</div>
+                                    <div class="intro-link-text">
+                                        <span class="intro-link-title" title="Gemma 4 Modellgrößen">Gemma 4 Modellgrößen</span>
+                                        <span class="intro-link-desc" title="Offizielle Detailübersicht von Google DeepMind">Offizielle Übersicht (DeepMind)</span>
+                                    </div>
+                                </a>
+                                <a href="https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemma-4-12b/" target="_blank" rel="noopener noreferrer" class="intro-link-card">
+                                    <div class="intro-link-icon">📰</div>
+                                    <div class="intro-link-text">
+                                        <span class="intro-link-title" title="Introducing Gemma 4 12B">Introducing Gemma 4 12B</span>
+                                        <span class="intro-link-desc" title="Google Ankündigungs-Blogbeitrag & Neuerungen">Google Blogankündigung</span>
+                                    </div>
+                                </a>
+                                <a href="https://ai.google.dev/gemma/docs/core/model_card_4" target="_blank" rel="noopener noreferrer" class="intro-link-card">
+                                    <div class="intro-link-icon">📑</div>
+                                    <div class="intro-link-text">
+                                        <span class="intro-link-title" title="Gemma 4 Model Card">Gemma 4 Model Card</span>
+                                        <span class="intro-link-desc" title="Technische Spezifikationen & Modellkarte für Entwickler">Technische Modellkarte</span>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -322,6 +360,91 @@
                         </p>
                         <div class="drawer-action-tip" id="drawer-step-tip">
                             <strong>Praxis-Tipp:</strong> Sortieren Sie Ihre PDFs vor der Indexierung grob vor. Je sauberer die Quelldaten, desto präziser antwortet das System!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW SECTION: DEPLOYMENT ENVIRONMENTS -->
+                <div class="deployment-section" style="margin-top: 3.5rem; padding-top: 3rem; border-top: 1px solid var(--border-color);">
+                    <div class="deployment-header">
+                        <span class="deployment-badge">Gemma 4 Ökosystem</span>
+                        <h2 class="deployment-main-title">Flexible Deployment-Umgebungen für Gemma 4</h2>
+                        <p class="deployment-subtitle">
+                            Ob maximale Datensouveränität vor Ort, skalierbare Cloud-Infrastruktur oder schnelle Browser-Experimente – Gemma 4 passt sich flexibel den Sicherheits- und Leistungsanforderungen Ihres KMU an.
+                        </p>
+                    </div>
+
+                    <div class="deployment-grid">
+                        <!-- 1. Local & On-Device Deployment -->
+                        <div class="deployment-card">
+                            <div class="deployment-card-header">
+                                <div class="deployment-icon-bg local">
+                                    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+                                </div>
+                                <h3 class="deployment-card-title">1. Local & On-Device</h3>
+                            </div>
+                            <p class="deployment-card-intro">
+                                Für absolute Privatsphäre, Offline-Fähigkeit und null API-Kosten laufen Gemma 4 Modelle direkt auf Ihrer eigenen Hardware.
+                            </p>
+                            <ul class="deployment-list">
+                                <li>
+                                    <strong class="dep-accent">Desktop & Laptop:</strong> Nutzen Sie quantisierte Gemma 4 Checkpoints (verfügbar in <strong>E2B, E4B, 12B, 26B & 31B</strong>) über extrem populäre und anwenderfreundliche Tools wie <a href="https://ollama.com/" target="_blank" rel="noopener noreferrer">Ollama</a> oder <a href="https://lmstudio.ai/" target="_blank" rel="noopener noreferrer">LM Studio</a>.
+                                </li>
+                                <li>
+                                    <strong class="dep-accent">Edge & Mobile:</strong> Die Modelle sind optimiert für den mobilen Betrieb auf iOS, Android (über das eingebaute <a href="https://developer.android.com/ml/aicore" target="_blank" rel="noopener noreferrer">Android AICore</a>) und kompakte Edge-Devices wie den <a href="https://www.raspberrypi.com/products/raspberry-pi-5/" target="_blank" rel="noopener noreferrer">Raspberry Pi 5</a>.
+                                </li>
+                                <li>
+                                    <strong class="dep-accent">Native Apps:</strong> Mac-Anwender können über die <a href="https://ai.google.dev/edge" target="_blank" rel="noopener noreferrer">Google AI Edge Gallery</a> modernste Modelle hardwarebeschleunigt auf Apple-Silicon-GPUs (M1/M2/M3/M4) ausführen.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 2. Cloud Platforms (Google Cloud) -->
+                        <div class="deployment-card">
+                            <div class="deployment-card-header">
+                                <div class="deployment-icon-bg cloud">
+                                    <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 17H5c-1.65 0-3-1.35-3-3 0-1.55 1.11-2.85 2.66-2.98l.84-.07.41-.74C6.79 8.78 9.24 7 12 7c2.9 0 5.43 1.89 6.09 4.7l.21 1 .92.09c1.56.15 2.78 1.41 2.78 3.01 0 1.65-1.35 3-3 3z"/></svg>
+                                </div>
+                                <h3 class="deployment-card-title">2. Cloud (Google Cloud)</h3>
+                            </div>
+                            <p class="deployment-card-intro">
+                                Für unternehmensweiten Zugriff, Kunden-Anwendungen und zentrale Governance betreiben Sie Gemma 4 skalierbar in der Cloud.
+                            </p>
+                            <ul class="deployment-list">
+                                <li>
+                                    <strong class="dep-accent">Serverless Scale:</strong> Stellen Sie Gemma 4 über <a href="https://cloud.google.com/run" target="_blank" rel="noopener noreferrer">Cloud Run</a> mit dedizierten GPU-Beschleunigern (wie NVIDIA L4) bereit – Sie zahlen sekundenpräzise nur bei aktiver Nutzung.
+                                </li>
+                                <li>
+                                    <strong class="dep-accent">Enterprise Control:</strong> Nutzen Sie den Google Cloud <a href="https://cloud.google.com/vertex-ai/docs/model-garden/introduction" target="_blank" rel="noopener noreferrer">Model Garden</a> (Vertex AI / Gemini Enterprise Agent Platform), um eigene Ressourcen zu provisionieren und volle Kontrolle über die Infrastruktur zu behalten.
+                                </li>
+                                <li>
+                                    <strong class="dep-accent">Custom Orchestration:</strong> Orchestrieren Sie komplexe High-Performance-Szenarien via <a href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener noreferrer">Google Kubernetes Engine (GKE)</a> mit <a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener noreferrer">vLLM</a> oder TPUs.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 3. Managed SaaS & Ecosystem Platforms -->
+                        <div class="deployment-card">
+                            <div class="deployment-card-header">
+                                <div class="deployment-icon-bg saas">
+                                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.7l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+                                </div>
+                                <h3 class="deployment-card-title">3. Managed & Ecosystem</h3>
+                            </div>
+                            <p class="deployment-card-intro">
+                                Für sofortige Tests ohne jeglichen Setup-Aufwand greifen Sie über fertige APIs und das globale KI-Ökosystem auf Gemma 4 zu.
+                            </p>
+                            <ul class="deployment-list">
+                                <li>
+                                    <strong class="dep-accent">Google AI Studio:</strong> Experimentieren Sie blitzschnell und kostenlos in einer Browser-Oberfläche direkt im <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio</a>.
+                                </li>
+                                <li>
+                                    <strong class="dep-accent">Zero-Setup APIs:</strong> Nutzen Sie kostengünstige, OpenAI-kompatible SaaS-Modellschnittstellen über Anbieter wie <a href="https://deepinfra.com/" target="_blank" rel="noopener noreferrer">DeepInfra</a>.
+                                </li>
+                                <li>
+                                    <strong class="dep-accent">Cloud Partners & Fine-tuning:</strong> Greifen Sie auf Partner-Plattformen wie <a href="https://aws.amazon.com/bedrock/" target="_blank" rel="noopener noreferrer">Amazon Bedrock</a> oder <a href="https://azure.microsoft.com/en-us/products/ai-foundry" target="_blank" rel="noopener noreferrer">Microsoft Azure AI Foundry</a> zu, laden Sie Weights über <a href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">Hugging Face</a> und feintunen Sie hocheffizient mit <a href="https://github.com/unsloth-tech/unsloth" target="_blank" rel="noopener noreferrer">Unsloth</a>.
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
