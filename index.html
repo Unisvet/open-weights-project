@@ -560,7 +560,7 @@
                             </p>
 
                             <!-- COMPLETE OLLAMA LOCAL CPU INSTRUCTIONS -->
-                            <div class="ollama-cpu-guide" style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border-left: 4px solid var(--color-success);">
+                            <div class="ollama-cpu-guide" style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--border-color); border-left: 4px solid var(--color-success);">
                                 <h3 style="margin-top: 0; color: var(--color-success); display: flex; align-items: center; gap: 8px;">
                                     ⚙️ Offline-Inbetriebnahme auf CPU-only Hardware (Ollama)
                                 </h3>
@@ -569,30 +569,30 @@
                                 </p>
                                 
                                 <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; font-size: 0.9rem;">
-                                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 6px;">
-                                        <strong>1. Ollama installieren</strong><br>
-                                        Laden Sie den Installer für Windows/macOS/Linux von <a href="https://ollama.com" target="_blank" style="color: var(--color-success);">ollama.com</a> herunter und führen Sie ihn aus.
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong style="color: var(--text-primary);">1. Ollama installieren</strong><br>
+                                        Laden Sie den Installer für Windows/macOS/Linux von <a href="https://ollama.com" target="_blank" style="color: var(--color-success); font-weight: 600;">ollama.com</a> herunter und führen Sie ihn aus.
                                     </div>
-                                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 6px;">
-                                        <strong>2. Modell-Auswahl je nach System-RAM:</strong><br>
-                                        <ul>
-                                            <li><strong>Gemma 4 (12B):</strong> Ausgezeichnete Logik, benötigt mindestens 16 GB bis 32 GB RAM. Antwortet auf CPU mit ca. 1-2 Tokens/Sek. <br><code style="background:#000; padding:2px 6px; border-radius:3px;">ollama run gemma4:12b</code></li>
-                                            <li><strong>Gemma 2 (2B) – <em>Empfehlungs-Tipp!</em>:</strong> Extrem flink auf reinen Office-CPUs, benötigt nur 4 GB RAM. Genial für schnelle RAG- und Agenten-Abläufe.<br><code style="background:#000; padding:2px 6px; border-radius:3px;">ollama run gemma2:2b</code></li>
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong style="color: var(--text-primary);">2. Modell-Auswahl je nach System-RAM:</strong><br>
+                                        <ul style="margin-top: 0.5rem; padding-left: 1.2rem;">
+                                            <li style="margin-bottom: 0.5rem;"><strong>Gemma 4 (12B):</strong> Ausgezeichnete Logik, benötigt mindestens 16 GB bis 32 GB RAM. Antwortet auf CPU mit ca. 1-2 Tokens/Sek. <br><code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">ollama run gemma4:12b</code></li>
+                                            <li><strong>Gemma 2 (2B) – <em>Empfehlungs-Tipp!</em>:</strong> Extrem flink auf reinen Office-CPUs, benötigt nur 4 GB RAM. Genial für schnelle RAG- und Agenten-Abläufe.<br><code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">ollama run gemma2:2b</code></li>
                                         </ul>
                                     </div>
-                                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 6px;">
-                                        <strong>3. Thread-Optimierung für maximales CPU-Tempo:</strong><br>
-                                        Erstellen Sie im Projektordner eine Datei namens <code style="background:#000; padding:2px 4px; border-radius:3px;">Modelfile</code> mit folgendem Inhalt:<br>
-                                        <pre style="background: #000; padding: 0.5rem; border-radius: 4px; font-size: 0.8rem; margin: 0.5rem 0;">FROM gemma4:12b
+                                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px;">
+                                        <strong style="color: var(--text-primary);">3. Thread-Optimierung für maximales CPU-Tempo:</strong><br>
+                                        Erstellen Sie im Projektordner eine Datei namens <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">Modelfile</code> mit folgendem Inhalt:<br>
+                                        <pre style="background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin: 0.5rem 0; font-family: var(--font-mono); line-height: 1.4;">FROM gemma4:12b
 PARAMETER num_thread 8   # Setzen Sie dies auf die physische Kern-Zahl Ihrer CPU
 PARAMETER num_ctx 4096    # Reduzierter Kontext schont RAM</pre>
                                         Erzeugen und starten Sie das Modell mit:<br>
-                                        <code style="background:#000; padding:2px 6px; border-radius:3px;">ollama create gemma4-cpu -f ./Modelfile</code><br>
-                                        <code style="background:#000; padding:2px 6px; border-radius:3px;">ollama run gemma4-cpu</code>
+                                        <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">ollama create gemma4-cpu -f ./Modelfile</code><br>
+                                        <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">ollama run gemma4-cpu</code>
                                     </div>
                                 </div>
-                                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
-                                    💡 <strong>Tipp:</strong> Sollte der Agent im Terminal zu langsam sein, passen Sie in <code style="background:#000; padding:2px 4px;">assets/gemma_agent.py</code> einfach den Modellnamen auf das pfeilschnelle <code style="background:#000; padding:2px 4px;">gemma2:2b</code> an.
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+                                    💡 <strong>Tipp:</strong> Sollte der Agent im Terminal zu langsam sein, passen Sie in <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">assets/gemma_agent.py</code> einfach den Modellnamen auf das pfeilschnelle <code style="background: var(--bg-tertiary); color: var(--text-primary); padding: 2px 4px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">gemma2:2b</code> an.
                                 </p>
                             </div>
 
