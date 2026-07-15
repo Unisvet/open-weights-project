@@ -724,14 +724,23 @@ function initOllamaModal() {
     const closeBtn = document.getElementById('ollama-modal-close');
     const closeBtnSec = document.getElementById('ollama-modal-close-btn');
 
-    if (!modalBtn || !modalOverlay) return;
+    console.log('[Ollama Modal] Initializing... Button:', modalBtn, 'Overlay:', modalOverlay);
 
-    function openModal() {
+    if (!modalBtn || !modalOverlay) {
+        console.warn('[Ollama Modal] Required elements not found in the DOM.');
+        return;
+    }
+
+    function openModal(e) {
+        if (e) e.preventDefault();
+        console.log('[Ollama Modal] Opening modal...');
         modalOverlay.classList.add('active');
         document.body.classList.add('modal-open');
     }
 
-    function closeModal() {
+    function closeModal(e) {
+        if (e) e.preventDefault();
+        console.log('[Ollama Modal] Closing modal...');
         modalOverlay.classList.remove('active');
         document.body.classList.remove('modal-open');
     }
@@ -744,17 +753,26 @@ function initOllamaModal() {
     // Close when clicking outside of the modal content
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) {
-            closeModal();
+            closeModal(e);
         }
     });
 
     // Close on escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-            closeModal();
+            closeModal(e);
         }
     });
 }
+
+// Independent DOMContentLoaded registration for Ollama Modal (guarantees execution even if other scripts error)
+window.addEventListener('DOMContentLoaded', () => {
+    try {
+        initOllamaModal();
+    } catch (err) {
+        console.error('[Ollama Modal] Error during independent initialization:', err);
+    }
+});
 
 // 8. Global Initializers on load
 window.addEventListener('DOMContentLoaded', () => {
@@ -763,5 +781,4 @@ window.addEventListener('DOMContentLoaded', () => {
     selectSvgNode('docs');
     updateStepperVisuals();
     renderQuizQuestion();
-    initOllamaModal();
 });
