@@ -616,6 +616,17 @@
                                 <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
                                     Führen Sie Sprachmodelle ohne Cloud-Anbindung, absolut sicher und datenschutzkonform direkt auf Ihrer eigenen Hardware via <strong>Ollama</strong> aus. Befolgen Sie diese Schritte im Terminal:
                                 </p>
+
+                                <!-- OLLAMA ARCHITECTURE CTA BUTTON -->
+                                <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                                    <div style="flex: 1; min-width: 250px;">
+                                        <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.2rem;">💡 Hintergrund-Architektur verstehen</strong>
+                                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Erfahren Sie im Detail, wie Ollama lokal arbeitet, RAM/VRAM verwaltet und die Datenströme steuert.</span>
+                                    </div>
+                                    <button class="btn-custom primary" id="ollama-info-btn" style="background: linear-gradient(135deg, var(--color-success), #059669); border: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25); white-space: nowrap;">
+                                        📊 Architektur &amp; Details anzeigen
+                                    </button>
+                                </div>
                                 
                                 <div style="display: flex; flex-direction: column; gap: 1.5rem; font-size: 0.9rem;">
                                     <!-- STEP 1 -->
@@ -1114,6 +1125,205 @@ Zahlbar innerhalb von 14 Tagen ohne Abzug auf DE88 3005 0000 1234 5678 90.
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- Ollama Info Modal -->
+    <div id="ollama-info-modal" class="ollama-modal-overlay">
+        <div class="ollama-modal">
+            <div class="ollama-modal-header">
+                <h3 class="ollama-modal-title">
+                    <span style="font-size: 1.6rem;">🦙</span> Wie arbeitet Ollama? (Hintergrund-Architektur)
+                </h3>
+                <button class="ollama-modal-close" id="ollama-modal-close" aria-label="Schließen">&times;</button>
+            </div>
+            <div class="ollama-modal-body">
+                <p style="margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.6;">
+                    Sie haben die absolut richtige Intuition! Wenn Sie <strong>Ollama</strong> nutzen, läuft alles <strong>vollständig lokal auf Ihrer eigenen Maschine</strong>. Es gibt keinen Cloud-Zwang, keine permanente Internetverbindung und keine Ihrer sensiblen Prompt-Daten verlässt Ihren Rechner.
+                </p>
+
+                <!-- SECTION 1 -->
+                <div class="modal-section-card" style="margin-bottom: 2rem;">
+                    <h4 class="modal-section-title" style="color: var(--color-md-blue); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.4rem; display: flex; align-items: center; gap: 8px;">
+                        <span>📦</span> 1. Was wird heruntergeladen? (Programm &amp; Gewichte)
+                    </h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                        <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 8px;">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.5rem; font-size: 1rem; border-left: 3px solid var(--color-md-blue); padding-left: 8px;">Das Programm (Ollama Engine)</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                                Wenn Sie Ollama installieren, laden Sie ein leichtgewichtiges, hochoptimiertes und fertig kompiliertes Programm (geschrieben in <strong>Go</strong> und <strong>C++</strong>) auf Ihr System herunter.
+                            </p>
+                            <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.8rem; padding-left: 1.2rem; line-height: 1.5;">
+                                <li style="margin-bottom: 0.4rem;"><strong>Server-Client-Architektur:</strong> Enthält einen Hintergrund-Server (Daemon) und ein Kommandozeilen-Tool (CLI).</li>
+                                <li><strong>Das Herzstück:</strong> Unter der Haube nutzt Ollama <code>llama.cpp</code> – eine extrem effiziente C/C++-Bibliothek, die LLMs auf Consumer-Hardware mit maximaler Geschwindigkeit ausführt.</li>
+                            </ul>
+                        </div>
+                        <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 8px;">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.5rem; font-size: 1rem; border-left: 3px solid var(--color-success); padding-left: 8px;">Die Modell-Gewichte (Model Weights)</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                                Wenn Sie ein Modell mit <code>ollama run</code> ausführen, werden die mathematischen Gewichte (die "Intelligenz" des Modells) einmalig aus der offiziellen Ollama-Registry heruntergeladen.
+                            </p>
+                            <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.8rem; padding-left: 1.2rem; line-height: 1.5;">
+                                <li style="margin-bottom: 0.4rem;"><strong>Das GGUF-Format:</strong> Ein hochgradig optimiertes Format, das alle Komponenten (Gewichte, Tokenizer, Hyperparameter) in einer einzigen Datei bündelt.</li>
+                                <li><strong>Quantisierung (Kompression):</strong> Nutzt standardmäßig 4-Bit-Quantisierung. Ein Modell schrumpft z. B. von 30 GB auf 4-5 GB, ohne spürbare Qualitätseinbußen, und passt perfekt in den RAM.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2 -->
+                <div class="modal-section-card" style="margin-bottom: 2rem;">
+                    <h4 class="modal-section-title" style="color: var(--color-md-blue); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.4rem; display: flex; align-items: center; gap: 8px;">
+                        <span>🧠</span> 2. Wie werden die Gewichte geladen? (RAM vs. VRAM)
+                    </h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-secondary);">
+                        Sobald Sie eine Anfrage stellen, liest Ollama die Modelldatei von Ihrer SSD und lädt sie in den Arbeitsspeicher. Dabei nutzt Ollama ein intelligentes Speicher-Management:
+                    </p>
+
+                    <!-- Interactive Diagram -->
+                    <div class="ollama-diagram-container" style="display: flex; align-items: center; justify-content: center; gap: 15px; margin: 1.5rem 0; padding: 1.2rem; background: rgba(29, 113, 184, 0.05); border-radius: 8px; border: 1px dashed var(--border-color); flex-wrap: wrap;">
+                        <div class="diagram-node" style="padding: 10px 15px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; font-weight: 600; color: var(--text-primary); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 8px;">
+                            <span>💾</span> Festplatte (SSD)
+                        </div>
+                        <div class="diagram-arrow" style="color: var(--color-success); font-weight: bold; font-size: 1.2rem; display: flex; flex-direction: column; align-items: center; min-width: 120px;">
+                            <span style="font-size: 1.4rem;">➔</span>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: normal; margin-top: -4px;">Einmalig beim Start laden</span>
+                        </div>
+                        <div class="diagram-node" style="padding: 10px 15px; background: var(--bg-primary); border: 1px solid var(--color-success); border-radius: 6px; font-weight: 600; color: var(--color-success); text-align: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); display: flex; align-items: center; gap: 8px;">
+                            <span>⚡</span> Arbeitsspeicher (RAM / VRAM)
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div class="scenario-card" style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 6px; transition: transform 0.2s ease;">
+                            <strong style="color: var(--color-success); display: block; margin-bottom: 0.4rem; font-size: 0.95rem;">Szenario A: Voller VRAM-Modus</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                                Wenn die GPU genügend Videospeicher (VRAM) besitzt, wird das Modell komplett dorthin geladen. Dies liefert die <strong>schnellste Performance</strong>.
+                            </p>
+                        </div>
+                        <div class="scenario-card" style="background: rgba(29, 113, 184, 0.04); border: 1px solid rgba(29, 113, 184, 0.1); padding: 1rem; border-radius: 6px; transition: transform 0.2s ease;">
+                            <strong style="color: var(--color-md-blue); display: block; margin-bottom: 0.4rem; font-size: 0.95rem;">Szenario B: Hybrid-Modus</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                                Ist der VRAM knapp, teilt Ollama das Modell dynamisch auf. Ein Teil der neuronalen Schichten läuft auf der GPU, der Rest auf der CPU (RAM).
+                            </p>
+                        </div>
+                        <div class="scenario-card" style="background: rgba(148, 163, 184, 0.04); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; transition: transform 0.2s ease;">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.4rem; font-size: 0.95rem;">Szenario C: Reiner CPU-Modus</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                                Ohne dedizierte GPU läuft das Modell vollständig im normalen System-RAM über den Hauptprozessor (CPU). Funktioniert dank <code>llama.cpp</code> dennoch flüssig.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem; background: var(--bg-primary); border-left: 4px solid var(--color-warning); padding: 0.8rem 1.2rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; color: var(--text-secondary);">
+                        ⏱️ <strong>Ressourcenschonend:</strong> Wenn Sie Ollama eine Zeit lang (standardmäßig 5 Minuten) nicht benutzen, entlädt der Server das Modell automatisch wieder aus dem RAM/VRAM. Dadurch blockiert Ollama keine Systemressourcen, wenn Sie es nicht brauchen.
+                    </div>
+                </div>
+
+                <!-- SECTION 3 -->
+                <div class="modal-section-card" style="margin-bottom: 2rem;">
+                    <h4 class="modal-section-title" style="color: var(--color-md-blue); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.4rem; display: flex; align-items: center; gap: 8px;">
+                        <span>🔄</span> 3. Wie fließen die Datenströme? (Der lokale Datenfluss)
+                    </h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 1.2rem; color: var(--text-secondary);">
+                        Da alle Komponenten lokal agieren, bleibt der gesamte Datenfluss auf Ihr System beschränkt. Die Datenströme verlassen zu keinem Zeitpunkt Ihr lokales Netzwerk.
+                    </p>
+
+                    <!-- Flow Steps -->
+                    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                        <div class="flow-step-item" style="display: flex; gap: 12px; background: var(--bg-primary); padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); transition: all 0.2s ease;">
+                            <span class="flow-step-num" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--color-md-blue); color: var(--color-white); border-radius: 50%; font-weight: bold; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px;">1</span>
+                            <div>
+                                <strong style="color: var(--text-primary); font-size: 0.9rem; display: block; margin-bottom: 0.1rem;">Eingabe (Prompt):</strong>
+                                <span style="font-size: 0.85rem; color: var(--text-secondary);">Sie tippen eine Frage im Terminal ein oder senden sie über ein GUI (z. B. Open WebUI, Chatbox).</span>
+                            </div>
+                        </div>
+                        <div class="flow-step-item" style="display: flex; gap: 12px; background: var(--bg-primary); padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); transition: all 0.2s ease;">
+                            <span class="flow-step-num" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--color-md-blue); color: var(--color-white); border-radius: 50%; font-weight: bold; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px;">2</span>
+                            <div>
+                                <strong style="color: var(--text-primary); font-size: 0.9rem; display: block; margin-bottom: 0.1rem;">Lokaler API-Call (HTTP):</strong>
+                                <span style="font-size: 0.85rem; color: var(--text-secondary);">Die UI sendet die Anfrage per lokalem Netzwerk-Protokoll (HTTP POST) an den Ollama-Server auf <code>http://localhost:11434/api/chat</code>.</span>
+                            </div>
+                        </div>
+                        <div class="flow-step-item" style="display: flex; gap: 12px; background: var(--bg-primary); padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); transition: all 0.2s ease;">
+                            <span class="flow-step-num" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--color-md-blue); color: var(--color-white); border-radius: 50%; font-weight: bold; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px;">3</span>
+                            <div>
+                                <strong style="color: var(--text-primary); font-size: 0.9rem; display: block; margin-bottom: 0.1rem;">Tokenisierung:</strong>
+                                <span style="font-size: 0.85rem; color: var(--text-secondary);">Die Ollama-Engine übersetzt Ihre Wörter in Zahlen (Tokens), mit denen das neuronale Netz rechnen kann.</span>
+                            </div>
+                        </div>
+                        <div class="flow-step-item" style="display: flex; gap: 12px; background: var(--bg-primary); padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); transition: all 0.2s ease;">
+                            <span class="flow-step-num" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--color-md-blue); color: var(--color-white); border-radius: 50%; font-weight: bold; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px;">4</span>
+                            <div>
+                                <strong style="color: var(--text-primary); font-size: 0.9rem; display: block; margin-bottom: 0.1rem;">Verarbeitung (Inferenz):</strong>
+                                <span style="font-size: 0.85rem; color: var(--text-secondary);">Die CPU und/oder GPU verarbeiten die Token Schicht für Schicht mithilfe der im RAM/VRAM liegenden Modellgewichte.</span>
+                            </div>
+                        </div>
+                        <div class="flow-step-item" style="display: flex; gap: 12px; background: var(--bg-primary); padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); transition: all 0.2s ease;">
+                            <span class="flow-step-num" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--color-md-blue); color: var(--color-white); border-radius: 50%; font-weight: bold; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px;">5</span>
+                            <div>
+                                <strong style="color: var(--text-primary); font-size: 0.9rem; display: block; margin-bottom: 0.1rem;">Detokenisierung:</strong>
+                                <span style="font-size: 0.85rem; color: var(--text-secondary);">Die berechneten Wahrscheinlichkeiten werden von der Engine wieder in lesbare Wörter zurückübersetzt.</span>
+                            </div>
+                        </div>
+                        <div class="flow-step-item" style="display: flex; gap: 12px; background: var(--bg-primary); padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); transition: all 0.2s ease;">
+                            <span class="flow-step-num" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--color-md-blue); color: var(--color-white); border-radius: 50%; font-weight: bold; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px;">6</span>
+                            <div>
+                                <strong style="color: var(--text-primary); font-size: 0.9rem; display: block; margin-bottom: 0.1rem;">Ausgabe (Streaming):</strong>
+                                <span style="font-size: 0.85rem; color: var(--text-secondary);">Ollama schickt die Antwort Token für Token in Echtzeit über die lokale Verbindung an die UI zurück.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4 -->
+                <div class="modal-section-card" style="margin-bottom: 1rem;">
+                    <h4 class="modal-section-title" style="color: var(--color-md-blue); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.4rem; display: flex; align-items: center; gap: 8px;">
+                        <span>⚖️</span> 4. Direkter Vergleich: Lokal vs. Cloud
+                    </h4>
+                    <div style="overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <table class="ollama-compare-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                            <thead>
+                                <tr style="background: var(--bg-primary); border-bottom: 1px solid var(--border-color);">
+                                    <th style="padding: 10px 15px; font-weight: 600; color: var(--text-primary);">Kriterium</th>
+                                    <th style="padding: 10px 15px; font-weight: 600; color: var(--color-success);">Lokaler Betrieb (Ollama)</th>
+                                    <th style="padding: 10px 15px; font-weight: 600; color: var(--text-secondary);">Cloud-Modelle (z.B. ChatGPT, Claude)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 10px 15px; font-weight: 600; color: var(--text-primary);">Ausführung</td>
+                                    <td style="padding: 10px 15px; color: var(--text-secondary);">Komplett auf Ihrer lokalen Hardware (CPU/GPU).</td>
+                                    <td style="padding: 10px 15px; color: var(--text-secondary);">Auf gigantischen Server-Clustern des Anbieters.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.01);">
+                                    <td style="padding: 10px 15px; font-weight: 600; color: var(--text-primary);">Ort der Gewichte</td>
+                                    <td style="padding: 10px 15px; color: var(--text-secondary);">Gespeichert auf Ihrer SSD, geladen in Ihren RAM.</td>
+                                    <td style="padding: 10px 15px; color: var(--text-secondary);">In den Rechenzentren des Anbieters.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 10px 15px; font-weight: 600; color: var(--text-primary);">Datenschutz</td>
+                                    <td style="padding: 10px 15px; color: var(--color-success); font-weight: 600;">100 % privat. Keine Daten fließen ins Internet.</td>
+                                    <td style="padding: 10px 15px; color: var(--text-secondary);">Eingaben werden übertragen und ggf. gespeichert/verwendet.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.01);">
+                                    <td style="padding: 10px 15px; font-weight: 600; color: var(--text-primary);">Internet</td>
+                                    <td style="padding: 10px 15px; color: var(--text-secondary);">Nein. Nur einmalig für den Modell-Download benötigt.</td>
+                                    <td style="padding: 10px 15px; color: var(--text-secondary);">Ja. Permanente, stabile Verbindung zwingend notwendig.</td>
+                                </tr>
+                                <tr style="background: rgba(16, 185, 129, 0.02);">
+                                    <td style="padding: 10px 15px; font-weight: 600; color: var(--text-primary);">Kosten</td>
+                                    <td style="padding: 10px 15px; color: var(--color-success); font-weight: 600;">Komplett kostenlos (außer Strom).</td>
+                                    <td style="padding: 10px 15px; color: var(--text-secondary);">Oft abobasiert oder nutzungsabhängig bezahlt (API-Kosten).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 1.2rem 2rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; background: var(--bg-secondary);">
+                <button class="btn-custom secondary" id="ollama-modal-close-btn">Schließen</button>
+            </div>
+        </div>
     </div>
 
     <!-- Application Logic -->

@@ -717,6 +717,45 @@ function copyCode(btn) {
     }
 }
 
+// Ollama Architecture Info Modal Initialization
+function initOllamaModal() {
+    const modalBtn = document.getElementById('ollama-info-btn');
+    const modalOverlay = document.getElementById('ollama-info-modal');
+    const closeBtn = document.getElementById('ollama-modal-close');
+    const closeBtnSec = document.getElementById('ollama-modal-close-btn');
+
+    if (!modalBtn || !modalOverlay) return;
+
+    function openModal() {
+        modalOverlay.classList.add('active');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.classList.remove('modal-open');
+    }
+
+    modalBtn.addEventListener('click', openModal);
+    
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (closeBtnSec) closeBtnSec.addEventListener('click', closeModal);
+
+    // Close when clicking outside of the modal content
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+}
+
 // 8. Global Initializers on load
 window.addEventListener('DOMContentLoaded', () => {
     initTheme();
@@ -724,4 +763,5 @@ window.addEventListener('DOMContentLoaded', () => {
     selectSvgNode('docs');
     updateStepperVisuals();
     renderQuizQuestion();
+    initOllamaModal();
 });
